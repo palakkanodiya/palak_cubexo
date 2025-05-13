@@ -839,3 +839,109 @@ a = array('u','palak')
 b = array('u','kanodiya')
 a.extend(b)
 print(a)
+
+
+Methods with Description
+1	
+append(x)
+
+Appends a new item with value x to the end of the array.
+
+2	
+extend(iterable)
+
+Appends items from iterable to the end of the array.
+
+3	
+insert(i, x)
+
+Inserts a new item with value x before position i.
+
+4	
+pop([i])
+
+Removes and returns the item with index i. If i is not specified, removes and returns the last item.
+
+5	
+remove(x)
+
+Removes the first occurrence of x from the array.
+
+Methods with Description
+1	
+reverse()
+
+Reverses the order of the items in the array.
+
+2	
+byteswap()
+
+"Byteswaps" all items of the array, useful for reading data from a file written on a machine with a different byte order.
+
+
+
+
+CONTRUCTOR
+
+Python constructor is an instance method in a class, that is automatically called whenever a new object of the class is created.
+
+Types of Constructor in Python
+Python has two types of constructor −
+
+Default Constructor
+Parameterized Constructor
+
+
+Default Constructor in Python
+The Python constructor which does not accept any parameter other than self is called as default constructor.
+
+Parameterized Constructor
+If a constructor is defined with multiple parameters along with self is called as parameterized constructor.
+
+
+
+#####default
+
+class student:
+    def __init__(self):
+        self.name = "palak"
+        self.age = 22
+
+p1 = student()
+print("my self: {}".format(p1.name))
+print("my age: {}".format(p1.age))
+
+
+
+#####parametrized
+
+
+class library:
+    def __init__(self,dept,serialNo):
+        self.dept = dept
+        self.serialNo = serialNo
+
+e1 = library("computer",3455676)
+e2 = library("maths",323547)
+
+print("current dept: {}".format(e1.dept))
+print("current dept: {}".format(e2.dept))
+print("current serialNo: {}".format(e1.serialNo))
+print("current serialNo: {}".format(e2.serialNo))
+
+MODULE
+
+
+What is Python Module
+A Python module is a file containing Python definitions and statements. A module can define functions, classes, and variables. A module can also include runnable code.
+
+import module
+from math import sqrt, factorial
+from module_name import *
+from math import *
+import sys
+import math
+import random
+import datetime
+from datetime import date
+import time
