@@ -368,5 +368,474 @@ except IOError:
    fh.close()
    sys.exit()
 
+try:
+    eh = open ('my text file',"w")
+    eh.write("this is my expection handling file")
+finally:
+    print("going to the close file")
+    eh.close()
 
 
+
+
+Exception
+
+Base class for all exceptions
+
+2	
+StopIteration
+
+Raised when the next() method of an iterator does not point to any object.
+
+3	
+SystemExit
+
+Raised by the sys.exit() function.
+
+4	
+StandardError
+
+Base class for all built-in exceptions except StopIteration and SystemExit.
+
+5	
+ArithmeticError
+
+Base class for all errors that occur for numeric calculation.
+
+6	
+OverflowError
+
+Raised when a calculation exceeds maximum limit for a numeric type.
+
+7	
+FloatingPointError
+
+Raised when a floating point calculation fails.
+
+8	
+ZeroDivisionError
+
+Raised when division or modulo by zero takes place for all numeric types.
+
+9	
+AssertionError
+
+Raised in case of failure of the Assert statement.
+
+10	
+AttributeError
+
+Raised in case of failure of attribute reference or assignment.
+
+11	
+EOFError
+
+Raised when there is no input from either the raw_input() or input() function and the end of file is reached.
+
+12	
+ImportError
+
+Raised when an import statement fails.
+
+13	
+KeyboardInterrupt
+
+Raised when the user interrupts program execution, usually by pressing Ctrl+c.
+
+14	
+LookupError
+
+Base class for all lookup errors.
+
+15	
+IndexError
+
+Raised when an index is not found in a sequence.
+
+16	
+KeyError
+
+Raised when the specified key is not found in the dictionary.
+
+17	
+NameError
+
+Raised when an identifier is not found in the local or global namespace.
+
+18	
+UnboundLocalError
+
+Raised when trying to access a local variable in a function or method but no value has been assigned to it.
+
+19	
+EnvironmentError
+
+Base class for all exceptions that occur outside the Python environment.
+
+20	
+IOError
+
+Raised when an input/ output operation fails, such as the print statement or the open() function when trying to open a file that does not exist.
+
+21	
+IOError
+
+Raised for operating system-related errors.
+
+22	
+SyntaxError
+
+Raised when there is an error in Python syntax.
+
+23	
+IndentationError
+
+Raised when indentation is not specified properly.
+
+24	
+SystemError
+
+Raised when the interpreter finds an internal problem, but when this error is encountered the Python interpreter does not exit.
+
+25	
+SystemExit
+
+Raised when Python interpreter is quit by using the sys.exit() function. If not handled in the code, causes the interpreter to exit.
+
+26	
+TypeError
+
+Raised when an operation or function is attempted that is invalid for the specified data type.
+
+27	
+ValueError
+
+Raised when the built-in function for a data type has the valid type of arguments, but the arguments have invalid values specified.
+
+28	
+RuntimeError
+
+Raised when a generated error does not fall into any category.
+
+29	
+NotImplementedError
+
+Raised when an abstract method that needs to be implemented in an inherited class is not actually implemented.
+
+
+Raising Exceptions in Python
+In Python, you can raise exceptions explicitly using the raise statement. Raising exceptions allows you to indicate that an error has occurred and to control the flow of your program by handling these exceptions appropriately.
+In Python, you can raise built-in exceptions like ValueError or TypeError to indicate common error conditions. Additionally, you can create and raise custom exceptions.
+
+Exception Chaining
+Exception chaining is a technique of handling exceptions by re-throwing a caught exception after wrapping it inside a new exception. The original exception is saved as a property (such as cause) of the new exception.
+
+Nested try Block in Python
+In a Python program, if there is another try-except construct either inside either a try block or inside its except block, it is known as a nested-try block. This is needed when different blocks like outer and inner may cause different errors. To handle them, we need nested try blocks.
+
+User-Defined Exceptions in Python
+User-defined exceptions in Python are custom error classes that you create to handle specific error conditions in your code. They are derived from the built-in Exception class or any of its sub classes.
+
+ Logging in Python
+Logging is the process of recording messages during the execution of a program to provide runtime information that can be useful for monitoring, debugging, and auditing.
+
+
+VIRTUAL ENVIORNMENT
+
+Python Virtual Environment
+Python virtual environments create a virtual installation of Python inside a project directory. Users can then install and manage Python packages for each project. This allows users to be able to install packages and modify their Python environment without fear of breaking packages installed in other environments.
+
+What is Virtual Environment in Python?
+A Python virtual environment is:
+
+Considered as disposable.
+Used to contain a specific Python interpreter and software libraries and binaries which are needed to support a project.
+Contained in a directory, conventionally either named venv or .venv in the project directory.
+Not considered as movable or copyable.
+When you install Python software on your computer, it is available for use from anywhere in the filesystem. This is a system-wide installation.
+
+
+TIME AND DATE
+
+ Python program can handle date and time in several ways. Converting between date formats is a common chore for computers. Following modules in Python's standard library handle date and time related processing −
+
+DateTime module
+
+Time module
+
+Calendar module
+
+
+HERE--
+import time
+time = time.localtime(time.time())
+print(time)
+
+# exact time date show
+import time
+astime = time.asctime()
+print(astime)
+
+
+Function with Description
+1	time.altzone
+The offset of the local DST timezone, in seconds west of UTC, if one is defined. This is negative if the local DST timezone is east of UTC (as in Western Europe, including the UK). Only use this if daylight is nonzero.
+
+2	time.asctime([tupletime])
+Accepts a time-tuple and returns a readable 24-character string such as 'Tue Dec 11 18:07:14 2008'.
+
+3	time.clock( )
+Returns the current CPU time as a floating-point number of seconds. To measure computational costs of different approaches, the value of time.clock is more useful than that of time.time().
+
+4	time.ctime([secs])
+Like asctime(localtime(secs)) and without arguments is like asctime( )
+
+5	time.gmtime([secs])
+Accepts an instant expressed in seconds since the epoch and returns a time-tuple t with the UTC time. Note : t.tm_isdst is always 0
+
+6	time.localtime([secs])
+Accepts an instant expressed in seconds since the epoch and returns a time-tuple t with the local time (t.tm_isdst is 0 or 1, depending on whether DST applies to instant secs by local rules).
+
+7	time.mktime(tupletime)
+Accepts an instant expressed as a time-tuple in local time and returns a floating-point value with the instant expressed in seconds since the epoch.
+
+8	time.sleep(secs)
+Suspends the calling thread for secs seconds.
+
+9	time.strftime(fmt[,tupletime])
+Accepts an instant expressed as a time-tuple in local time and returns a string representing the instant as specified by string fmt.
+
+10	time.strptime(str,fmt='%a %b %d %H:%M:%S %Y')
+Parses str according to format string fmt and returns the instant in time-tuple format.
+
+11	time.time( )
+Returns the current time instant, a floating-point number of seconds since the epoch.
+
+12	time.tzset()
+Resets the time conversion rules used by the library routines. The environment variable TZ specifies how this is done.
+
+
+The calendar Module
+The calendar module supplies calendar-related functions, including functions to print a text calendar for a given month or year.
+
+import calendar 
+
+calc = calendar.month(2026,5)
+print(calc)
+
+
+The calendar Module
+The calendar module supplies calendar-related functions, including functions to print a text calendar for a given month or year.
+
+By default, calendar takes Monday as the first day of the week and Sunday as the last one. To change this, call the calendar.setfirstweekday() function.
+
+Here is a list of functions available with the calendar module −
+
+Sr.No.	Function with Description
+1	
+calendar.calendar()
+
+Returns a multi-line string with a calendar for year year formatted into three columns separated by c spaces. w is the width in characters of each date; each line has length 21*w+18+2*c. l is the number of lines for each week.
+
+2	
+calendar.firstweekday()
+
+Returns the current setting for the weekday that starts each week. By default, when calendar is first imported, this is 0, meaning Monday.
+
+3	
+calendar.isleap()
+
+Returns True if year is a leap year; otherwise, False.
+
+4	
+calendar.leapdays()
+
+Returns the total number of leap days in the years within range(y1,y2).
+
+5	
+calendar.month()
+
+Returns a multi-line string with a calendar for month month of year year, one line per week plus two header lines. w is the width in characters of each date; each line has length 7*w+6. l is the number of lines for each week.
+
+6	
+calendar.monthcalendar()
+
+Returns a list of lists of ints. Each sublist denotes a week. Days outside month month of year year are set to 0; days within the month are set to their day-of-month, 1 and up.
+
+7	
+calendar.monthrange()
+
+Returns two integers. The first one is the code of the weekday for the first day of the month month in year year; the second one is the number of days in the month. Weekday codes are 0 (Monday) to 6 (Sunday); month numbers are 1 to 12.
+
+8	
+calendar.prcal()
+
+Like print calendar.calendar(year,w,l,c).
+
+9	
+calendar.prmonth()
+
+Like print calendar.month(year,month,w,l).
+
+10	
+calendar.setfirstweekday()
+
+Sets the first day of each week to weekday code weekday. Weekday codes are 0 (Monday) to 6 (Sunday).
+
+11	
+calendar.timegm()
+
+The inverse of time.gmtime: accepts a time instant in time-tuple form and returns the same instant as a floating-point number of seconds since the epoch.
+
+12	
+calendar.weekday()
+
+Returns the weekday code for the given date. Weekday codes are 0 (Monday) to 6 (Sunday); month numbers are 1 (January) to 12 (December).
+
+
+import calendar 
+
+calc = calendar.month(2026,5)
+# calc = calendar.calendar(2025)
+calc = calendar.firstweekday()
+calc = calendar.isleap(2002)
+calc = calendar.month(2002,12)
+calc = calendar.monthcalendar(2023,5)
+calc = calendar.prcal(2002)
+calc = calendar.prmonth(2004,11)
+
+print(calc)
+
+
+
+Python date Object
+A date object represents a date with year, month, and day. The current Gregorian calendar is indefinitely extended in both directions.
+
+import datetime
+calci = datetime.date(2023, 4, 4)
+print(calci)
+
+date class attributes
+date.min − The earliest representable date, date(MINYEAR, 1, 1).
+
+date.max − The latest representable date, date(MAXYEAR, 12, 31).
+
+date.resolution − The smallest possible difference between non-equal date objects.
+
+date.year − Between MINYEAR and MAXYEAR inclusive.
+
+date.month − Between 1 and 12 inclusive.
+
+date.day − Between 1 and the number of days in the given month of the given year.
+
+# PYTHON DATE OBJ
+from datetime import date
+# calci = datetime.date(2023, 4, 4)
+calci = date.min
+calci = date.max
+calci = date.resolution
+date1 = date(2002,12,26)
+calci = date1.year
+calci = date1.month
+calci = date1.day
+print(calci)
+
+
+FUNCTION , LAMBA FUNCTION  
+
+What is the lambda function in Python?
+Lambda Function, often known as an 'Anonymous Function,' is the same as a normal Python function except that it can be defined without a name. The def keyword is used to define normal functions, while the lambda keyword is used to define anonymous functions. They are, however, limited to a single line of expression. They, like regular functions, can accept several parameters.
+
+
+inputString = "tutorialPoint"
+
+ints1 = lambda inputString : inputString.upper()[::-2]
+print(ints1(inputString))
+
+def squ(x):
+    return x*x
+
+lambda_squ = lambda x: x*x
+
+print(squ(3))
+print(lambda_squ(6))
+
+
+r = 'palakaknodiya'
+intt = lambda r: r.lower()[::-1]
+print(intt(r))
+
+sum_max = lambda x , y: x if (x > y) else y
+print(sum_max(45,34))
+
+
+ARRAY
+
+An ARray is a conta ariner which can hold a fix number of items and these items should be of the same type. Each item stored in an array is called an element and they can be of any type including integers, floats, strings, etc.
+
+import array as arr
+
+cars = arr.array('u','LAMBERGINI')
+
+print(type(cars),cars)
+
+##########################
+
+Basic Operations on Python Arrays
+Following are the basic operations supported by an array −
+
+Traverse − Print all the array elements one by one.
+
+Insertion − Adds an element at the given index.
+
+Deletion − Deletes an element at the given index.
+
+Search − Searches an element using the given index or by the value.
+
+Update − Updates an element at the given index.
+
+
+from array import *
+
+arr1 = array('i',[10,20,30,40,50,60,70,80,90])
+print(arr1[0])
+
+
+
+from array import *
+
+arr1 = array('i', [10,20,30,40,50,60,70,80,90])
+print(arr1[0])
+print(arr1[8])
+arr1.insert(10,100) #insertion
+arr1.remove(40)#deletetion
+print(arr1.index(20)) #serach
+arr1[2] = 2626
+for arr2 in arr1:
+    print(arr2)
+
+
+from array import *
+
+a = array('i',[10,120,30,90,50,60])
+for i in range(0,len(a)):
+    for j in range(i+1,len(a)):
+        if(a[i] > a[j]):
+            temp = a[i]
+            a[i] = a[j]
+            a[j] = temp
+print(a)
+
+
+
+##########using sort
+b = a.tolist()
+print(b)
+
+
+########### join using exxtend
+
+a = array('u','palak')
+b = array('u','kanodiya')
+a.extend(b)
+print(a)
