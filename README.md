@@ -329,3 +329,44 @@ Produces a printable string representation of a dictionary
 Returns the type of the passed variable. If passed variable is dictionary, then it would return a dictionary type.
 
 
+DAY 2 --13 MAY
+EXCEPTION HANDLING
+
+
+Exception Handling in Python
+Exception handling in Python refers to managing runtime errors that may occur during the execution of a program. In Python, exceptions are raised when errors or unexpected situations arise during program execution.
+
+Assertions in Python
+An assertion is a sanity-check that you can turn on or turn off when you are done with your testing of the program.
+
+The try: block contains statements which are susceptible for exception
+
+If exception occurs, the program jumps to the except: block.
+
+If no exception in the try: block, the except: block is skipped.
+
+try:
+    fh = open("test filw", "r")
+    fh.write("this is my file for exception handling")
+except IOError:
+    print("cant find file ")
+else:
+    print("wriiten content succesfully")
+    fh.close()
+    
+import sys
+
+try:
+   fh = open("testfile", "w")
+   try:
+      fh.write("This is my test file for exception handling!!")
+   finally:
+      print ("Going to close the file")
+    #   fh.close()
+except IOError:
+   print ("Error: can\'t find file or read data")
+   fh.close()
+   sys.exit()
+
+
+
