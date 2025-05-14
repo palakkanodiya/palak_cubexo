@@ -573,3 +573,210 @@ import datetime
 from datetime import date
 import time
 
+
+FILE HANDLING
+
+File Handling in Python
+File handling in Python involves interacting with files on your computer to read data from them or write data to them. Python provides several built-in functions and methods for creating, opening, reading, writing, and closing files.
+
+Modes & Description
+1	
+r
+
+Opens a file for reading only. The file pointer is placed at the beginning of the file. This is the default mode.
+
+2	
+rb
+
+Opens a file for reading only in binary format. The file pointer is placed at the beginning of the file. This is the default mode.
+
+3	
+r+
+
+Opens a file for both reading and writing. The file pointer placed at the beginning of the file.
+
+4	
+rb+
+
+Opens a file for both reading and writing in binary format. The file pointer placed at the beginning of the file.
+
+5	
+w
+
+Opens a file for writing only. Overwrites the file if the file exists. If the file does not exist, creates a new file for writing.
+
+6	
+b
+
+Opens the file in binary mode
+
+7	
+t
+
+Opens the file in text mode (default)
+
+8	
++
+
+open file for updating (reading and writing)
+
+9	
+wb
+
+Opens a file for writing only in binary format. Overwrites the file if the file exists. If the file does not exist, creates a new file for writing.
+
+10	
+w+
+
+Opens a file for both writing and reading. Overwrites the existing file if the file exists. If the file does not exist, creates a new file for reading and writing.
+
+11	
+wb+
+
+Opens a file for both writing and reading in binary format. Overwrites the existing file if the file exists. If the file does not exist, creates a new file for reading and writing.
+
+12	
+a
+
+Opens a file for appending. The file pointer is at the end of the file if the file exists. That is, the file is in the append mode. If the file does not exist, it creates a new file for writing.
+
+13	
+ab
+
+Opens a file for appending in binary format. The file pointer is at the end of the file if the file exists. That is, the file is in the append mode. If the file does not exist, it creates a new file for writing.
+
+14	
+a+
+
+Opens a file for both appending and reading. The file pointer is at the end of the file if the file exists. The file opens in the append mode. If the file does not exist, it creates a new file for reading and writing.
+
+15	
+ab+
+
+Opens a file for both appending and reading in binary format. The file pointer is at the end of the file if the file exists. The file opens in the append mode. If the file does not exist, it creates a new file for reading and writing.
+
+16	
+x
+
+open for exclusive creation, failing if the file already exists
+
+
+fh = open("new.txt",'r')
+print("name of the file", fh.open)
+print("closessing or not", fh.close)
+print("opening mode", fh.mode)
+fh.close()
+
+with open("example.txt","r") as file:
+    main_file = file.read()
+    print(main_file)
+
+with open("drWebCmd.txt","r") as files:
+    imp_data = files.readline()
+    print(imp_data)
+
+with open("exclusive.txt","r") as files:
+    imp_data = files.readline()
+    for line in imp_data:
+        print(line, end='')
+
+fr = open("normal.txt",'w')
+fw = fr.write()
+print("file written succesfully",fw)
+
+lines = ["dbms\n","cs\n","cn\n"]
+with open("example.txt",'w') as file:
+    file.writelines(lines)
+    print("content added succesfully!")
+
+
+filess = open("exact.txt","w")
+filess.write("this an example")
+filess.close()
+print("successfully")
+
+
+try:
+    fc = open("exple.txt",'w')
+    fc.write("this is an example of exception handling")
+finally:
+    file.close()
+    print("succesfully closed")
+
+
+    #########################################
+
+LOGGING
+
+Logging in Python
+Logging is the process of recording messages during the execution of a program to provide runtime information that can be useful for monitoring, debugging, and auditing.
+
+Benefits of Logging
+            Following are the benefits of using logging in Python −
+            
+            Debugging − Helps identify and diagnose issues by capturing relevant information during program execution.
+            
+            Monitoring − Provides insights into the application's behavior and performance.
+            
+            Auditing − Keeps a record of important events and actions for security purposes.
+            
+            Troubleshooting − Facilitates tracking of program flow and variable values to understand unexpected behavior.
+
+
+Logging Levels
+
+            DEBUG − Detailed information, typically useful only for debugging purposes. These messages are used to trace the flow of the program and are usually not seen in production environments.
+            
+            INFO − Confirmation that things are working as expected. These messages provide general information about the progress of the application.
+            
+            WARNING − Indicates potential issues that do not prevent the program from running but might require attention. These messages can be used to alert developers about unexpected situations.
+            
+            ERROR − Indicates a more serious problem that prevents a specific function or operation from completing successfully. These messages highlight errors that need immediate attention but do not necessarily terminate the application.
+            
+            CRITICAL − The most severe level, indicating a critical error that may lead to the termination of the program. These messages are reserved for critical failures that require immediate intervention.
+
+
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def calculate_sum(a, b):
+   logging.debug(f"Calculating sum of {a} and {b}")
+   result = a + b
+   logging.info(f"Sum calculated successfully: {result}")
+   return result
+
+if __name__ == "__main__":
+   logging.info("Starting the program")
+   result = calculate_sum(10, 20)
+   logging.info("Program completed")
+
+
+Configuring Logging
+          Configuring logging in Python refers to setting up various components such as loggers, handlers, and formatters to control how and where log messages are stored and displayed.
+
+Assertions in Python
+          Assertions in Python are statements that assert or assume a condition to be true. If the condition turns out to be false, Python raises an AssertionError exception. They are used to detect programming errors that should never occur if the code is correct
+
+
+PIP AND PACKAGE
+Pip in Python
+         In Python, pip is the standard package management system used to install and manage software packages written in Python. It allows you to easily install libraries and frameworks to extend the functionality of Python applications. pip comes bundled with Python, starting from Python version 3.4 and above.
+        Pip is the Python package installer, used to install and manage packages from the Python Package Index (PyPI) or other repositories. 
+Creating a Package:
+        Create a Package Directory: Start by creating a directory with the name of your package.
+        Add Python Files: Place your Python modules (files) within this directory.
+        Create __init__.py: Create an empty file named __init__.py inside the package directory. This file signifies that the directory is a Python package. 
+
+STEPS:
+     pip install requests
+
+     pip install requests==2.25.1
+
+     pip install --upgrade requests
+
+DAY-- 3   14-MAY
+
+
