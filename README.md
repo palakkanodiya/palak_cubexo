@@ -368,5 +368,208 @@ except IOError:
    fh.close()
    sys.exit()
 
+FUNCTION , LAMBA FUNCTION  
 
+What is the lambda function in Python?
+Lambda Function, often known as an 'Anonymous Function,' is the same as a normal Python function except that it can be defined without a name. The def keyword is used to define normal functions, while the lambda keyword is used to define anonymous functions. They are, however, limited to a single line of expression. They, like regular functions, can accept several parameters.
+
+
+inputString = "tutorialPoint"
+
+ints1 = lambda inputString : inputString.upper()[::-2]
+print(ints1(inputString))
+
+def squ(x):
+    return x*x
+
+lambda_squ = lambda x: x*x
+
+print(squ(3))
+print(lambda_squ(6))
+
+
+r = 'palakaknodiya'
+intt = lambda r: r.lower()[::-1]
+print(intt(r))
+
+sum_max = lambda x , y: x if (x > y) else y
+print(sum_max(45,34))
+
+
+ARRAY
+
+An ARray is a conta ariner which can hold a fix number of items and these items should be of the same type. Each item stored in an array is called an element and they can be of any type including integers, floats, strings, etc.
+
+import array as arr
+
+cars = arr.array('u','LAMBERGINI')
+
+print(type(cars),cars)
+
+##########################
+
+Basic Operations on Python Arrays
+Following are the basic operations supported by an array −
+
+Traverse − Print all the array elements one by one.
+
+Insertion − Adds an element at the given index.
+
+Deletion − Deletes an element at the given index.
+
+Search − Searches an element using the given index or by the value.
+
+Update − Updates an element at the given index.
+
+
+from array import *
+
+arr1 = array('i',[10,20,30,40,50,60,70,80,90])
+print(arr1[0])
+
+
+
+from array import *
+
+arr1 = array('i', [10,20,30,40,50,60,70,80,90])
+print(arr1[0])
+print(arr1[8])
+arr1.insert(10,100) #insertion
+arr1.remove(40)#deletetion
+print(arr1.index(20)) #serach
+arr1[2] = 2626
+for arr2 in arr1:
+    print(arr2)
+
+
+from array import *
+
+a = array('i',[10,120,30,90,50,60])
+for i in range(0,len(a)):
+    for j in range(i+1,len(a)):
+        if(a[i] > a[j]):
+            temp = a[i]
+            a[i] = a[j]
+            a[j] = temp
+print(a)
+
+
+
+##########using sort
+b = a.tolist()
+print(b)
+
+
+########### join using exxtend
+
+a = array('u','palak')
+b = array('u','kanodiya')
+a.extend(b)
+print(a)
+
+
+Methods with Description
+1	
+append(x)
+
+Appends a new item with value x to the end of the array.
+
+2	
+extend(iterable)
+
+Appends items from iterable to the end of the array.
+
+3	
+insert(i, x)
+
+Inserts a new item with value x before position i.
+
+4	
+pop([i])
+
+Removes and returns the item with index i. If i is not specified, removes and returns the last item.
+
+5	
+remove(x)
+
+Removes the first occurrence of x from the array.
+
+Methods with Description
+1	
+reverse()
+
+Reverses the order of the items in the array.
+
+2	
+byteswap()
+
+"Byteswaps" all items of the array, useful for reading data from a file written on a machine with a different byte order.
+
+
+
+
+CONTRUCTOR
+
+Python constructor is an instance method in a class, that is automatically called whenever a new object of the class is created.
+
+Types of Constructor in Python
+Python has two types of constructor −
+
+Default Constructor
+Parameterized Constructor
+
+
+Default Constructor in Python
+The Python constructor which does not accept any parameter other than self is called as default constructor.
+
+Parameterized Constructor
+If a constructor is defined with multiple parameters along with self is called as parameterized constructor.
+
+
+
+#####default
+
+class student:
+    def _init_(self):
+        self.name = "palak"
+        self.age = 22
+
+p1 = student()
+print("my self: {}".format(p1.name))
+print("my age: {}".format(p1.age))
+
+
+
+#####parametrized
+
+
+class library:
+    def _init_(self,dept,serialNo):
+        self.dept = dept
+        self.serialNo = serialNo
+
+e1 = library("computer",3455676)
+e2 = library("maths",323547)
+
+print("current dept: {}".format(e1.dept))
+print("current dept: {}".format(e2.dept))
+print("current serialNo: {}".format(e1.serialNo))
+print("current serialNo: {}".format(e2.serialNo))
+
+MODULE
+
+
+What is Python Module
+A Python module is a file containing Python definitions and statements. A module can define functions, classes, and variables. A module can also include runnable code.
+
+import module
+from math import sqrt, factorial
+from module_name import *
+from math import *
+import sys
+import math
+import random
+import datetime
+from datetime import date
+import time
 
