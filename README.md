@@ -1013,7 +1013,7 @@ Every iterator is not a generator	Every generator is an iterator
 
 ASYNCIO
 
-Asynchronous programming allows a program to execute multiple tasks seemingly simultaneously. Instead of waiting for each task to complete in sequence, the program can switch between tasks, improving efficiency, especially for I/O-bound operations. Python's asyncio library facilitates asynchronous programming using coroutines, event loops, and tasks. 
+Asynchronous programming allows a program to execute multiple tasks seemingly simultaneously. Instead of waiting for each task to complete in sequence, the program can switch between tasks, improving efficiency, especially for I/O-bound operations. Python's asyncio library facilitates asynchronous programming using coroutines, event loops, and tasks. Asyncio is used as a foundation for multiple Python asynchronous frameworks that provide high-performance network and web servers, database connection libraries, distributed task queues, etc
 
 
 Core Concepts
@@ -1049,4 +1049,315 @@ Disadvantage
             Complexity:
             Asynchronous code can be more complex to write and debug than synchronous code, especially for beginners.
 
-            
+
+
+import asyncio
+
+async def fn():
+    print("hello")
+    await asyncio.sleep(2)
+    print("hii : sb bdia??")
+    await asyncio.sleep(3)
+    print("bye ")
+    
+asyncio.run(fn())
+
+###########33
+
+async def fn():
+    print("hello")
+    await asyncio.sleep(2)
+    await fn2()
+    print("hii : sb bdia??")
+    await asyncio.sleep(3)
+    print("bye ")
+
+async def fn2():
+    print("bbyyeeee")
+    await asyncio.sleep(1)
+    print("wru")
+    await asyncio.sleep(3)
+    print("hru:")
+
+# asyncio.run(fn2())ṇnnnn
+asyncio.run(fn())
+
+
+##########3
+PEP:--
+Type Hints and Annotations (PEP 8)
+
+For Python, PEP 8 has emerged as the style guide that most projects adhere to; it promotes a very readable and eye-pleasing coding style. Every Python developer should read it at some point; here are the most important points extracted for you:
+
+1. Use 4-space indentation and no tabs.
+       def exm(var_one, var_two, var_three):
+        print(var_one)
+
+def function_name(
+        variable_one, variable_two, variable_three,
+        variable_four):
+    print(variable_one)
+
+2. Use docstrings : There are both single and multi-line docstrings that can be used in Python.
+def exam():
+    """This is single line docstring"""
+
+    """This is
+    a
+    multiline comment"""
+
+3. Wrap lines so that they don’t exceed 79 characters : The Python standard library is conservative and requires limiting lines to 79 characters. The lines can be wrapped using parenthesis, brackets, and braces. They should be used in preference to backslashes.
+Example:
+
+with open('/path/from/where/you/want/to/read/file') as file_one, \
+     open('/path/where/you/want/the/file/to/be/written', 'w') as file_two:
+    file_two.write(file_one.read())
+
+
+4. Use of regular and updated comments are valuable to both the coders and users : There are also various types and conditions that if followed can be of great help from programs and users point of view. Comments should form complete sentences. If a comment is a full sentence, its first word should be capitalized, unless it is an identifier that begins with a lower case letter. In short comments, the period at the end can be omitted. In block comments, there are more than one paragraphs and each sentence must end with a period. Block comments and inline comments can be written followed by a single ‘#’.
+Example of inline comments:
+
+geek = geek + 1                 # Increment
+
+5. Use of trailing commas : This is not mandatory except while making a tuple.
+Example:
+
+tup = ("geek",)
+5. Use Python’s default UTF-8 or ASCII encodings and not any fancy encodings, if it is meant for international environment.
+
+6. Use spaces around operators and after commas, but not directly inside bracketing constructs:
+
+a = f(1, 2) + g(3, 4)
+7. Naming Conventions : There are few naming conventions that should be followed in order to make the program less complex and more readable. At the same time, the naming conventions in Python is a bit of mess, but here are few conventions that can be followed easily.
+There is an overriding principle that follows that the names that are visible to the user as public parts of API should follow conventions that reflect usage rather than implementation.
+Here are few other naming conventions:
+
+b (single lowercase letter)
+
+B (single upper case letter)
+
+lowercase
+
+lower_case_with_underscores
+
+UPPERCASE
+
+UPPER_CASE_WITH_UNDERSCORES
+
+CapitalizedWords (or CamelCase). This is also sometimes known as StudlyCaps.
+Note: While using abbreviations in CapWords, capitalize all the letters 
+of the abbreviation. Thus HTTPServerError is better than HttpServerError.
+
+mixedCase (differs from CapitalizedWords by initial lowercase character!)
+
+Capitalized_Words_With_Underscores
+
+8. Characters that should not be used for identifiers : ‘l’ (lowercase letter el), ‘O’ (uppercase letter oh), or ‘I’ (uppercase letter eye) as single character variable names as these are similar to the numerals one and zero.
+
+9. Don’t use non-ASCII characters in identifiers if there is only the slightest chance people speaking a different language will read or maintain the code.
+
+10. Name your classes and functions consistently : The convention is to use CamelCase for classes and lower_case_with_underscores for functions and methods. Always use self as the name for the first method argument.
+
+11. While naming of function of methods always use self for the first argument to instance methods and cls for the first argument to class methods.If a functions argument name matches with reserved words then it can be written with a trailing comma.
+
+#####################
+num = 7
+
+# uncomment to take input from the user 
+#num = int(input("Enter a number: ")) 
+
+factorial = 1
+
+# check if the number is negative, positive or zero 
+if num < 0: 
+	print("Sorry, factorial does not exist for negative numbers") 
+elif num == 0: 
+	print("The factorial of 0 is 1") 
+else: 
+	for i in range(1,num + 1): 
+		factorial = factorial*i 
+		
+print("The factorial of",num,"is",factorial) 
+
+
+
+####################3
+
+Closures And Decorators In Python
+
+Closures and decorators are powerful features in Python that allow for more advanced and flexible code patterns. Understanding these concepts can greatly enhance your ability to write clean, efficient, and reusable code.
+
+
+Closures in Python
+A closure in Python occurs when a nested function captures the local variables from its enclosing scope. This allows the nested function to access these variables even after the outer function has finished executing.
+
+How Closures Work
+Closures are created when:
+
+There is a nested function.
+The nested function references a value in its enclosing scope.
+The enclosing function returns the nested function.
+
+
+def outer(m):
+    msg = m
+
+    def inner():
+        print(msg)
+
+    return inner
+
+closure = outer("hello")
+closure()
+
+
+Decorators in Python
+Python Decorators are a powerful and expressive tool in Python that allows you to modify the behavior of a function or method. They are often used to add "wrapping" functionality to existing functions in a clean and readable way.
+
+How Decorators Work
+A decorator is a function that takes another function as an argument, adds some kind of functionality, and returns a new function. 
+
+def simple_doc(fun):
+    def wrap():
+        print("hello guys")
+        fun()
+        print("hii palak")
+    return wrap()
+
+@simple_doc
+
+def last_doc():
+    print("hello mere doston")
+
+
+######################3
+
+Memory Management in Python
+
+Understanding Memory allocation is important to any software developer as writing efficient code means writing a memory-efficient code. Memory allocation can be defined as allocating a block of space in the computer memory to a program. In Python memory allocation and deallocation method is automatic as the Python developers created a garbage collector for Python so that the user does not have to do manual garbage collection.
+
+Garbage Collection
+
+Garbage collection is a process in which the interpreter frees up the memory when not in use to make it available for other objects.
+Assume a case where no reference is pointing to an object in memory i.e. it is not in use so, the virtual machine has a garbage collector that automatically deletes that object from the heap memory
+##########
+
+
+Memory Allocation in Python
+There are two parts of memory:
+
+stack memory
+heap memory
+The methods/method calls and the references are stored in stack memory and all the values objects are stored in a private heap.
+
+Work of Stack Memory
+The allocation happens on contiguous blocks of memory. We call it stack memory allocation because the allocation happens in the function call stack. The size of memory to be allocated is known to the compiler and whenever a function is called, its variables get memory allocated on the stack.
+
+It is the memory that is only needed inside a particular function or method call. When a function is called, it is added onto the program’s call stack. Any local memory assignments such as variable initializations inside the particular functions are stored temporarily on the function call stack, where it is deleted once the function returns, and the call stack moves on to the next task. This allocation onto a contiguous block of memory is handled by the compiler using predefined routines, and developers do not need to worry about it.
+
+def func():  
+        
+    # All these variables get memory   
+    # allocated on stack   
+    a = 20
+    b = []  
+    c = ""  
+
+
+Work of Heap Memory
+The memory is allocated during the execution of instructions written by programmers. Note that the name heap has nothing to do with the heap data structure. It is called heap because it is a pile of memory space available to programmers to allocated and de-allocate. The variables are needed outside of method or function calls or are shared within multiple functions globally are stored in Heap memory.
+
+# This memory for 10 integers   
+# is allocated on heap.   
+a = [0]*10 
+
+
+####################   MULTI THREADING  
+
+In Python, multithreading allows you to run multiple threads concurrently within a single process, which is also known as thread-based parallelism. This means a program can perform multiple tasks at the same time, enhancing its efficiency and responsiveness.
+
+Multithreading in Python is especially useful for multiple I/O-bound operations, rather than for tasks that require heavy computation.
+
+
+Comparison with Processes
+                An operating system is capable of handling multiple processes concurrently. It allocates a separate memory space to each process so that one process cannot access or write anything in other's space.
+![multithreading](https://github.com/user-attachments/assets/5d91bcb3-6df3-46a8-98cc-a7f795f746a6)
+
+
+
+Thread Handling Modules in Python
+Python's standard library provides two main modules for managing threads: _thread and threading.
+
+The _thread Module
+The _thread module, also known as the low-level thread module, has been a part of Python's standard library since version 2. It offers a basic API for thread management, supporting concurrent execution of threads within a shared global data space. The module includes simple locks (mutexes) for synchronization purposes.
+
+The threading Module
+The threading module, introduced in Python 2.4, builds upon _thread to provide a higher-level and more comprehensive threading API. It offers powerful tools for managing threads, making it easier to work with threads in Python applications.
+
+Starting a New Thread
+To create and start a new thread in Python, you can use either the low-level _thread module or the higher-level threading module. The threading module is generally recommended due to its additional features and ease of use. Below, you can see both approaches.
+
+Starting a New Thread Using the _thread Module
+The start_new_thread() method of the _thread module provides a basic way to create and start new threads. This method provides a fast and efficient way to create new threads in both Linux and Windows. Following is the syntax of the method −
+
+thread.start_new_thread(function, args[, kwargs] )
+This method call returns immediately, and the new thread starts executing the specified function with the given arguments. When the function returns, the thread terminates.
+
+
+Synchronizing Threads
+The threading module provided with Python includes a simple-to-implement locking mechanism that allows you to synchronize threads. A new lock is created by calling the Lock() method, which returns the new lock.
+
+Multithreaded Priority Queue
+The Queue module allows you to create a new queue object that can hold a specific number of items. There are following methods to control the Queue −
+
+get() − The get() removes and returns an item from the queue.
+
+put() − The put adds item to a queue.
+
+qsize() − The qsize() returns the number of items that are currently in the queue.
+
+empty() − The empty( ) returns True if queue is empty; otherwise, False.
+
+full() − the full() returns True if queue is full; otherwise, False.
+
+##################
+
+
+A thread object goes through different stages during its life cycle. When a new thread object is created, it must be started, which calls the run() method of thread class. This method contains the logic of the process to be performed by the new thread. The thread completes its task as the run() method is over, and the newly created thread merges with the main thread.
+
+While a thread is running, it may be paused either for a predefined duration or it may be asked to pause till a certain event occurs. The thread resumes after the specified interval or the process is over.
+
+thread_life_cycle
+States of a Thread Life Cycle in Python
+Following are the stages of the Python Thread life cycle −
+
+Creating a Thread − To create a new thread in Python, you typically use the Thread class from the threading module.
+Starting a Thread − Once a thread object is created, it must be started by calling its start() method. This initiates the thread's activity and invokes its run() method in a separate thread.
+Paused/Blocked State − Threads can be paused or blocked for various reasons, such as waiting for I/O operations to complete or another thread to perform a task. This is typically managed by calling its join() method. This blocks the calling thread until the thread being joined terminates.
+Synchronizing Threads − Synchronization ensures orderly execution and shared resource management among threads. This can be done by using synchronization primitives like locks, semaphores, or condition variables.
+Termination − A thread terminates when its run() method completes execution, either by finishing its task or encountering an exception.
+
+#####################
+
+
+Creating Threads with Functions
+You can create threads by using the Thread class from the threading module. In this approach, you can create a thread by simply passing a function to the Thread object.
+
+
+from threading import Thread
+
+def additional_work(x,y):
+    result = x + y
+    print("the sum of the value is {} + {} = {}".format(x,y,result))
+
+def cube_num(i):
+    result = i * 5
+    print("the cubic number is{} = {}".format(i,result))
+
+def last_num():
+    print("basic number run succesfully")
+
+
+Thread(target=additional_work,args=(5,6)).start()
+Thread(target=cube_num,args=(9,)).start()
+Thread(target=last_num).start()
