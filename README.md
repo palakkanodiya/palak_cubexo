@@ -779,4 +779,274 @@ STEPS:
 
 DAY-- 3   14-MAY
 
+RECURSION
 
+        Recursion involves a function calling itself directly or indirectly to solve a problem by breaking it down into simpler and more manageable parts. In Python, recursion is widely used for tasks that can be divided into identical subtasks.
+
+        
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n-1)
+print(factorial(122))
+
+
+def fab(v):
+    if v >=0:
+        return 0
+    elif v > 0:
+        return 1
+    else:
+        v * fab(v - 1) + fab(v + 1)
+print(fab(6))
+
+
+""""""Iteration:
+Iteration involves loops (for, while) to repeat the execution of a block of code.
+It is generally more memory-efficient as it does not involve multiple stack frames like recursion.""""""
+
+
+Advantages of using recursion
+        Simplicity: Recursive code is generally simpler and cleaner, especially for problems inherently recursive in nature (e.g., tree traversals, dynamic programming problems).
+        Reduced Code Length: Recursion can reduce the length of the code since the repetitive tasks are handled through repeated function calls.
+
+
+Disadvantages of using recursion
+        Memory Overhead: Each recursive call adds a new layer to the stack, which can result in significant memory use, especially for deep recursion.
+        Performance Issues: Recursive functions may lead to slower responses due to overheads like function calls and returns.
+        Risk of Stack Overflow: Excessive recursion can lead to a stack overflow error if the recursion depth exceeds the stack limit.
+
+
+Filter
+        The filter() function creates a new collection containing only the elements from the original collection that satisfy a given condition. It takes two arguments: a function that defines the condition and an iterable (e.g., a list).
+#######################
+listed = [10,20,50,60,40,33]
+sort_listed = list(filter(lambda x : x >= 25, listed))
+print(sort_listed)
+
+
+
+#############################
+def fab(n):
+    if n <= 0:
+        return 0
+    else :
+        return 1
+    
+n = [2,3,4,0,6,6]
+
+num = filter(fab,n)
+print("after filter:",list(num))
+
+
+ef is_odd(n):
+    return n % 3 == 0
+
+n = [24,4,6,8,9,2,3,4,5]
+
+on = filter(is_odd,n)
+print("oddlist:",list(on))
+
+
+MAP FUNC
+Map Function in Python
+
+        The map () function returns a map object(which is an iterator) of the results after applying the given function to each item of a given iterable (list, tuple, etc.).
+
+def is_map (n):
+    return n % 2 
+
+n = [12,23,34,45,56,6,77,89,88]
+
+new_map = map(is_map,n)
+print(list(new_map))
+
+
+
+REDUCE FUNC
+The reduce(fun,seq) function is used to apply a particular function passed in its argument to all of the list elements mentioned in the sequence passed along. This function is defined in “functools” module.
+
+from functools import reduce
+def is_red (n,p):
+
+    return n%p
+
+redd = [2,3,4,5,6,7,4,5,6,7,3,4]
+res = reduce(is_red,redd)
+
+print(res)
+########################################3
+
+LIST COMPREHENSION
+
+List comprehension is a way to create lists using a concise syntax. It allows us to generate a new list by applying an expression to each item in an existing iterable (such as a list or range). This helps us to write cleaner, more readable code compared to traditional looping techniques.
+
+d = [2,45,67,34,55,6]
+
+liss = [val * 7 for val in d]
+print(liss)
+
+##########3
+
+a = [1, 2, 3, 4, 5]
+res = []
+for val in a:
+    res.append(val * 2)
+print(res)
+
+
+##########3
+Python’s list comprehension and slicing 
+
+            Python’s list comprehension and slicing are powerful tools for handling and manipulating lists. When combined, they offer a concise and efficient way to create sublists and filter elements.
+
+
+a = [1, 2, 3, 4, 5, 6]
+result = [x * 2 for x in a[:3]]
+
+print(result)
+
+List Methods
+Let’s look at different list methods in Python:
+
+append(): Adds an element to the end of the list.
+copy(): Returns a shallow copy of the list.
+clear(): Removes all elements from the list.
+count(): Returns the number of times a specified element appears in the list.
+extend(): Adds elements from another list to the end of the current list.
+index(): Returns the index of the first occurrence of a specified element.
+insert(): Inserts an element at a specified position.
+pop(): Removes and returns the element at the specified position (or the last element if no index is specified).
+remove(): Removes the first occurrence of a specified element.
+reverse(): Reverses the order of the elements in the list.
+sort(): Sorts the list in ascending order (by default).
+
+###########append###########3
+a = [1, 2, 3]
+
+a.append(4)
+print(a)
+#######################3
+
+
+
+REGULAR EXPRESSION
+A Regular Expression or RegEx is a special sequence of characters that uses a search pattern to find a string or set of strings.
+
+RegEx Functions
+re module contains many functions that help us to search a string for a match.
+
+Let’s see various functions provided by this module to work with regex in Python. 
+
+Function	Description
+re.findall()	finds and returns all matching occurrences in a list
+re.compile() 	Regular expressions are compiled into pattern objects
+re.split() 	Split string by the occurrences of a character or a pattern.
+re.sub() 	Replaces all occurrences of a character or patter with a replacement string.
+re.escape()	Escapes special character
+re.search()	Searches for first occurrence of character or pattern
+
+
+
+import re
+p = re.compile('[A-E]')
+
+print(p.findall("hAyE WhaTS GoiNGG oN nOW"))
+
+
+
+
+######################3
+ITRATIONS
+        A process that is repeated more than one time by applying the same logic is called an Iteration.  In programming languages like python, a loop is created with few conditions to perform iteration till it exceeds the limit. If the loop is executed 6 times continuously, then we could say the particular block has iterated 6 times. 
+
+
+a = [1,2,4,6,3,5,7]
+for aa in a:
+    if aa % 2 == 0:
+        print(str(a)+'evn')
+    else:
+        print(str(a)+'odd')
+
+ITRATORS
+        An iterator is an object which contains a countable number of values and it is used to iterate over iterable objects like list, tuples, sets, etc. Iterators are implemented using a class and a local variable for iterating is not required here, It follows lazy evaluation where the evaluation of the expression will be on hold and stored in the memory until the item is called specifically which helps us to avoid repeated evaluation. As lazy evaluation is implemented, it requires only 1 memory location to process the value and when we are using a large dataset then, wastage of RAM space will be reduced the need to load the entire dataset at the same time will not be there.
+
+        
+iter_li = iter(['palak','kanodiya'])
+print(next(iter_li))
+print(next(iter_li))
+
+######
+
+GENERATORS
+        It is another way of creating iterators in a simple way where it uses the keyword “yield” instead of returning it in a defined function. Generators are implemented using a function. Just as iterators, generators also follow lazy evaluation. Here, the yield function returns the data without affecting or exiting the function. It will return a sequence of data in an iterable format where we need to iterate over the sequence to use the data as they won’t store the entire sequence in the memory.
+
+        def gen(a):
+    for i in range(1,a+1):
+        yield i*i
+
+a = gen(10)
+print(next(a))
+print(next(a))
+print(next(a))
+
+
+
+
+Table of difference between Iterator vs Generators
+Iterator	Generator
+Class is used to implement an iterator
+
+Function is used to implement a generator.
+
+Local Variables aren’t used here.                                         
+
+All the local variables before the yield function are stored. 
+
+Iterators are used mostly to iterate or convert other objects to an iterator using iter() function.                                                               	Generators are mostly used in loops to generate an iterator by returning all the values in the loop without affecting the iteration of the loop
+Iterator uses iter() and next() functions 	Generator uses yield keyword
+Every iterator is not a generator	Every generator is an iterator
+
+
+############33
+
+ASYNCIO
+
+Asynchronous programming allows a program to execute multiple tasks seemingly simultaneously. Instead of waiting for each task to complete in sequence, the program can switch between tasks, improving efficiency, especially for I/O-bound operations. Python's asyncio library facilitates asynchronous programming using coroutines, event loops, and tasks. 
+
+
+Core Concepts
+            Coroutines:
+            Functions declared with async def that can pause and resume execution, allowing other code to run in the meantime. The await keyword is used within coroutines to wait for other coroutines or awaitables to complete.
+            Event Loop:
+            The central control mechanism that manages and schedules the execution of coroutines. It monitors for I/O events and switches between coroutines as needed.
+            Tasks:
+            Used to schedule coroutines for execution by the event loop. They represent an ongoing computation and can be awaited or cancelled.
+            Futures:
+            Represent the result of an asynchronous operation. They are similar to promises in other languages and can be awaited to obtain the result.
+
+
+
+Common Use Cases
+            I/O-bound operations:
+            Asynchronous programming is well-suited for tasks that involve waiting for external resources, such as network requests, file I/O, or database queries.
+            Web development:
+            Frameworks like aiohttp leverage asyncio to handle concurrent requests efficiently, making them ideal for building high-performance web applications.
+            Data processing:
+            Asynchronous programming can be used to process large datasets concurrently, improving performance and reducing processing time.
+
+
+
+Advantages
+            Improved performance:
+            By avoiding blocking operations, asynchronous programming can significantly improve the performance of I/O-bound applications.
+            Increased responsiveness:
+            Applications remain responsive to user input and other events while waiting for long-running tasks to complete.
+
+
+Disadvantage
+            Complexity:
+            Asynchronous code can be more complex to write and debug than synchronous code, especially for beginners.
+
+            
