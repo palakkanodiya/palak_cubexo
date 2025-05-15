@@ -1312,10 +1312,274 @@ print("Main thread continuing to run")
 
 DAY 4  15 MAY
 
-Testing (PieTests, UnitTests)
+Define Custom Exceptions in Python
+
+In Python, exceptions occur during the execution of a program that disrupts the normal flow of the program’s instructions. When an error occurs, Python raises an exception, which can be caught and handled using try and except blocks.
 
 
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("You cannot divide by zero!")
+
+
+1. Defining a Custom Exception
+2. Defining a Custom Exception
+3. Raising a Custom Exception
+4. Handling Custom Exceptions
+
+
+class MyError(Exception):
+
+    def __init__(self,message,error_code):
+        self.message = message
+        self.error_code = error_code
+        super().__init__(self.message)
+
+    def divide(a,b):
+        if b == 0:
+            raise MyError("divide",300)
+        return a / b
+
+    def __str__(self):
+        return f"{self.message} and {self.error_code}"
+    
+try:
+    raise FileExistsError("syntax error","example.txt", 13)
+except FileExistsError as e:
+    print("caught: {e}")
+
+#################333
+
+PY TEST 
+
+Python Pytest is a framework based on Python. It is mainly used to write API test cases. It helps you write better programs. In the present days of REST services, Pytest is mainly used for API testing even though we can use Pytest to write simple to complex test cases, i.e., we can write codes to test API, UI, database, etc.
+
+How to Install Pytest?
+
+nstall Pytest using pip :
+
+
+
+
+1
+pip install pytest
+After installing Pytest in you System , You need to verify the installing .
+
+Verify the installation :
+
+You can verify that Pytest is installed by checking its version:
+
+1
+pytest --version
  
+Write our Basic Test:----
+
+import pytest
+
+def fun(x):
+    return x + 5
+
+def test_method():
+    assert fun(3) == 8
+
+test_logging_exm.py::test_method PASSED  #output
+
+###### multiple and error test case use
+
+import pytest 
+
+def test_ans1():
+    a = 8
+    b = 9
+    assert a == b
+
+def test_ans2():
+    c = 14
+    d = 7*2
+    assert c==d
+
+def test_ans3():
+    a = 9
+    b = 9
+    if a==b:
+        print("true")
 
 
 
+1 failed, 3 passed in 0.10s #output
+
+'''area module'''
+
+
+def circle(radius):
+    return 3.14 * radius
+
+def square(side):
+    return side ** 2
+
+def rectangle(length, breadth):
+    return length * breadth
+
+def parallelogram(base, height):
+    return base * height
+
+def triangle(base, height):
+    return 1/2 * (base * height)
+
+
+
+Unittest
+Python Unittest is a built-in testing framework that provides a set of tools for testing our code's functionality in a more systematic and organized manner. With unittest framework, we can create test cases, fixtures, and suites to verify if our code behaves as expected. It allows us to write test methods within classes that check different aspects of our code such as input, output, and edge cases. It also supports test discovery making it easy for us to automate test execution across our project.
+
+
+Assert Methods in Python Unittest Framework
+unittest has lots of methods to assert on the values, types, and existence of variables. Below are some of the methods that are commonly used to write assertions.
+
+Method
+
+Description
+
+.assertEqual(a, b)
+
+Checks if a is equal to b, similar to the expression a == b.
+
+.assertTrue(x)
+
+Asserts that the boolean value of x is True, equivalent to bool(x) is True.
+
+.assertIsInstance(a, b)
+
+Asserts that a is an instance of class b, similar to the expression isinstance(a, b).
+
+.assertIsNone(x)
+
+Ensures that x is None, similar to the expression x is None.
+
+.assertFalse(x)
+
+Asserts that the boolean value of x is False, similar to bool(x) is False.
+
+
+import unittest
+
+def add(a, b):
+    return a + b
+
+class TestAddFunction(unittest.TestCase):
+    def test_add_positive_numbers(self):
+        self.assertEqual(add(1, 2), 3)
+
+    def test_add_negative_numbers(self):
+        self.assertEqual(add(-1, -2), -3)
+
+    def test_add_mixed_numbers(self):
+        self.assertEqual(add(1, -2), -1)
+        self.assertEqual(add(-1, 2), 1)
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+
+###################################
+
+DJANGO 
+
+
+DJANGO is a high level python frame work. 
+Follow DRY METHOD.
+AIMS -- reduce redundacny in  code and more effcient and easier.
+easy to switch database.
+built in admin interface.
+fully functional framework.
+It has thousands of additional packages available.
+It is very scalable.
+
+    
+
+Key Concepts in Django:
+1. Project and App:
+
+Project: A project is a collection of configurations and apps. It's the highest-level structure in Django.
+App: An app is a web application that does something specific. A project can contain multiple apps, like a blog app, a forum app, etc.
+2. MTV Architecture:
+
+Django follows an architectural pattern called the MTV (Model-Template-View) pattern. Let's break it down:
+
+Model:
+Represents your data and the database structure.
+It's like a blueprint for your data.
+Template:
+Determines how the user interface looks.
+It's like a template for your web pages.
+View:
+Handles the logic of your application and controls what data is displayed in the template.
+It's like the brain of your application.
+3. Settings:
+
+Django uses a settings file to configure the web application, including database settings, middleware, static files, templates, and more.
+
+4. URL Patterns:
+
+Django uses a URL dispatcher to route HTTP requests to the appropriate view based on the URL pattern defined in the urls.py file.
+
+
+
+
+Why use Django Web Framework?
+Choosing Django as a web framework has several advantages, especially for beginners and professionals alike. Here are some reasons why you might choose Django:
+
+Batteries-Included Philosophy:
+                            Django follows a "batteries-included" philosophy, meaning it provides a vast number of built-in features and functionalities. This allows developers to focus on building the application rather than setting up and configuring the tools needed for development.
+                            
+MTV Architecture: 
+                Django's Model-Template-View (MTV) architecture is a well-structured and organized way to develop web applications. It separates the data (Model), the user interface (Template), and the business logic (View), making it easier to manage and maintain the code.
+                
+ORM (Object-Relational Mapping):
+                            Django includes a powerful ORM that allows developers to interact with the database using Python objects instead of writing SQL queries. This simplifies database operations and reduces the risk of SQL injection.
+                            
+Admin Panel:
+            Django comes with a built-in admin panel that is automatically generated based on the models defined in the application. This allows developers to perform CRUD (Create, Read, Update, Delete) operations on the database without writing additional code.
+            
+Security Features:
+                Django has built-in protection against various web vulnerabilities, including SQL injection, CSRF (Cross-Site Request Forgery), and XSS (Cross-Site Scripting), making it a secure choice for web application development.
+                
+Scalability: 
+        Django is designed to handle high-traffic websites and can easily scale to accommodate increased load and data.
+
+
+from django.db import models
+
+# Create your models here.
+class GeeksModel(models.Model):
+    title = models.CharField(max_length = 200)
+    description = models.TextField()
+
+
+############
+
+MTV AND URL
+
+MVT Structure has the following three parts - 
+
+Model:
+        The model is going to act as the interface of your data. It is responsible for maintaining data. It is the logical data structure behind the entire application and is represented by a database (generally relational databases such as MySql, Postgres). 
+
+View:
+        The View is the user interface — what you see in your browser when you render a website. It is represented by HTML/CSS/Javascript and Jinja files.
+
+Template: 
+            A template consists of static parts of the desired HTML output as well as some special syntax describing how dynamic content will be inserted. 
+            
+![image](https://github.com/user-attachments/assets/7c854e13-1197-4924-af3c-f0207b5da711)
+
+
+ ## URL ###
+
+  
+In Django URL patterns serve as a crucial mechanism for directing incoming requests to the appropriate views within your web application. With the flexibility of regular expressions, Django's URL dispatcher allows you to define patterns that match specific URL patterns and route them to corresponding views. When dealing with GET parameters passed through URLs in Django, accessing these parameters within views is straightforward, enabling efficient handling of user inputs and customization of responses.
+
+
+  
+ 
