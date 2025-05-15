@@ -573,3 +573,742 @@ import datetime
 from datetime import date
 import time
 
+
+#######################  DAY 3 14 MAY
+
+What is Package in Python?
+Package refers to a distribution of Python code that includes one or more modules or libraries. These packages are typically published on the Python Package Index (PyPI) and can be easily installed using pip. Python packages may contain modules, sub-packages, and additional resources such as documentation and data files.
+
+What is Python PIP?
+Python PIP is the package manager for Python packages. We can use PIP to install packages that do not come with Python.
+
+
+How to Install Python PIP?
+Python PIP comes pre-installed on 3.4 or older versions of Python. To Check if PIP is Installed or not type the below command in the terminal.
+
+
+pip –version
+
+
+
+How to Install Package with Python PIP
+We can install additional packages by using the Python pip install command. Let’s suppose we want to install the Numpy using PIP. We can do it using the below command.
+
+Syntax: 
+
+
+pip install numpy
+
+
+
+Specifying Package Version using Python PIP
+We can also install the package of a specific version by using the below command.
+
+Syntax: 
+
+
+pip install package_name==version
+
+
+Display Package information using Python PIP
+We can use the Python pip show command to display the details of a particular package. 
+
+Syntax: 
+
+
+pip show numpy
+
+
+Get a list of locally installed Python Modules using Python PIP
+The Python pip list command displays a list of packages installed in the system. 
+
+Syntax: 
+
+
+pip list
+
+
+Uninstall Packages with Python PIP
+The Python pip uninstall command uninstalls a particular existing package. 
+
+Syntax: 
+
+
+pip uninstall numpy
+
+
+Search Packages with Python PIP
+We can search for a particular existing package using the Python pip search command. 
+
+Syntax: 
+
+
+pip search numpy
+
+
+Using Requirement files with Python PIP
+
+Syntax: 
+
+
+pip install -r requirements.txt
+
+
+Downgrading Packages with Python PIP
+the Python pip install –user command is used to downgrade a package to a specific version.
+
+Syntax:
+
+
+pip install –user package_name==version
+
+####################3
+
+
+Map Reduce and Filter Operations in Python
+Below, are examples of Map Reduce and Filter Operations in Python:
+
+map() Function
+Reduce() Function
+Filter() Function
+
+
+Map Function in Python
+The map () function returns a map object(which is an iterator) of the results after applying the given function to each item of a given iterable (list, tuple, etc.).
+
+Syntax: map(fun, iter)
+
+Parameters:
+
+fun: It is a function to which map passes each element of given iterable.
+iter:  iterable object to be mapped.
+
+# Function to return double of n
+def double(n):
+    return n * 2
+
+# Using map to double all numbers
+numbers = [5, 6, 7, 8]
+result = map(double, numbers)
+print(list(result))
+
+Reduce Function in Python
+The reduce function is used to apply a particular function passed in its argument to all of the list elements mentioned in the sequence passed along.This function is defined in “functools” module.
+
+Syntax: reduce(func, iterable[, initial])
+
+Parameters:
+
+fun: It is a function to execute on each element of the iterable object.
+iter: It is iterable to be reduced
+
+import functools
+
+# Define a list of numbers
+numbers = [1, 2, 3, 4]
+
+# Use reduce to compute the product of list elements
+product = functools.reduce(lambda x, y: x * y, numbers)
+print("Product of list elements:", product)
+
+
+
+Filter Function in Python
+The filter() method filters the given sequence with the help of a function that tests each element in the sequence to be true or not. 
+
+Syntax: filter(function, sequence)
+
+Parameters:
+
+function: function that tests if each element of a sequence is true or not.
+sequence: sequence which needs to be filtered, it can be sets, lists, tuples, or containers of any iterators.
+
+
+# Define a function to check if a number is even
+def is_even(n):
+    return n % 2 == 0
+
+# Define a list of numbers
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# Use filter to filter out even numbers
+even_numbers = filter(is_even, numbers)
+print("Even numbers:", list(even_numbers))
+
+
+RECURSIVE FUNC
+
+In other words, a recursive function is a function that solves a problem by solving smaller instances of the same problem. This technique is commonly used in programming to solve problems that can be broken down into simpler, similar subproblems.
+
+Need of Recursive Function:
+A recursive function is a function that solves a problem by solving smaller instances of the same problem. This technique is often used in programming to solve problems that can be broken down into simpler, similar subproblems.
+
+
+1. Solving complex tasks:
+Recursive functions break complex problems into smaller instances of the same problem, resulting in compact and readable code.
+
+2. Divide and Conquer:
+Recursive functions are suitable for divide-and-conquer algorithms such as merge sort and quicksort, breaking problems into smaller subproblems, solving them recursively, and merging the solutions with the original problem.
+
+3. Backtracking:
+Recursive backtracking is ideal for exploring and solving problems like N-Queens and Sudoku.
+
+4. Dynamic programming:
+Recursive functions efficiently solve dynamic programming problems by solving subproblems and combining their solutions into a complete solution.
+
+5. Tree and graph structures:
+Recursive functions are great for working with tree and graph structures, simplifying traversal and pattern recognition tasks.
+
+
+Components of a recursive function:
+Base case: Every recursive function must have a base case. The base case is the simplest scenario that does not require further recursion. This is a termination condition that prevents the function from calling itself indefinitely. Without a proper base case, a recursive function can lead to infinite recursion.
+
+Recursive case: In the recursive case, the function calls itself with the modified arguments. This is the essence of recursion – solving a larger problem by breaking it down into smaller instances of the same problem. The recursive case should move closer to the base case with each iteration.
+
+
+#include <iostream>
+using namespace std;
+
+// Recursive Function to calculate Factorial of a number
+int factorial(int n)
+{
+    // Base case
+    if (n == 0) {
+        return 1;
+    }
+
+    // Recursive case
+    return n * factorial(n - 1);
+}
+
+// Driver Code
+
+int main()
+{
+    int n = 4;
+
+    cout << "Factorial of " << n
+         << " is:" << factorial(n);
+    return 0;
+}
+
+
+
+##############3
+LIST COMPREHENSIVE
+
+
+List comprehensions offer a concise way to create lists in Python, while regular expressions provide a powerful tool for pattern matching in strings. They can be effectively combined to filter or transform list elements based on complex string patterns.
+
+List Comprehension
+It provides a compact syntax for creating new lists by applying an expression to each item in an existing iterable (like a list, tuple, or range). 
+
+
+numbers = [1, 2, 3, 4, 5]
+squared_numbers = [x**2 for x in numbers]
+print(squared_numbers)  # Output: [1, 4, 9, 16, 25]
+
+
+Regular Expressions
+They are sequences of characters that define a search pattern. Python's re module enables operations like searching, matching, and substituting text based on these patterns.
+
+
+import re
+text = "The quick brown fox jumps over the lazy dog."
+pattern = r"fox"
+match = re.search(pattern, text)
+if match:
+    print("Pattern found:", match.group())  # Output: Pattern found: fox
+
+
+
+Combining List Comprehension and Regular Expressions
+List comprehensions can incorporate regular expressions to filter or modify list elements based on pattern matches.
+
+
+import re
+words = ["apple", "banana", "cherry", "date", "elderberry"]
+pattern = r"^a"  # Words starting with "a"
+filtered_words = [word for word in words if re.match(pattern, word)]
+print(filtered_words)  # Output: ['apple']
+
+
+Transforming with Regular Expressions
+
+import re
+log_entries = ["ERROR: File not found", "INFO: Operation successful", "WARNING: Disk space low"]
+pattern = r"^(ERROR|WARNING): (.*)"
+formatted_entries = [re.sub(pattern, r"\1 - \2", entry) for entry in log_entries]
+print(formatted_entries)
+
+
+##########################
+
+Iterator
+An iterator is an object which contains a countable number of values and it is used to iterate over iterable objects like list, tuples, sets, etc. Iterators are implemented using a class and a local variable for iterating is not required here, It follows lazy evaluation where the evaluation of the expression will be on hold and stored in the memory until the item is called specifically which helps us to avoid repeated evaluation. As lazy evaluation is implemented, it requires only 1 memory location to process the value and when we are using a large dataset then, wastage of RAM space will be reduced the need to load the entire dataset at the same time will not be there.
+
+
+Using an iterator-
+
+iter() function is used to create an iterator containing an iterable object.
+next() function is used to call the next element in the iterable object.
+
+iter_list = iter(['Geeks', 'For', 'Geeks'])
+print(next(iter_list))
+print(next(iter_list))
+print(next(iter_list))
+
+
+
+Generators
+It is another way of creating iterators in a simple way where it uses the keyword “yield” instead of returning it in a defined function. Generators are implemented using a function. Just as iterators, generators also follow lazy evaluation. Here, the yield function returns the data without affecting or exiting the function. It will return a sequence of data in an iterable format where we need to iterate over the sequence to use the data as they won’t store the entire sequence in the memory.
+
+def sq_numbers(n):
+    for i in range(1, n+1):
+        yield i*i
+
+
+a = sq_numbers(3)
+
+print("The square of numbers 1,2,3 are : ")
+print(next(a))
+print(next(a))
+print(next(a))
+
+
+
+Table of difference between Iterator vs Generators
+Iterator	Generator
+Class is used to implement an iterator
+
+Function is used to implement a generator.
+
+Local Variables aren't used here.                                         
+
+All the local variables before the yield function are stored. 
+
+Iterators are used mostly to iterate or convert other objects to an iterator using iter() function.                                                               	Generators are mostly used in loops to generate an iterator by returning all the values in the loop without affecting the iteration of the loop
+Iterator uses iter() and next() functions 	Generator uses yield keyword
+Every iterator is not a generator	Every generator is an iterator
+
+
+#################3
+
+asyncio in Python
+
+Asyncio is a Python library that is used for concurrent programming, including the use of async iterator in Python. It is not multi-threading or multi-processing. Asyncio is used as a foundation for multiple Python asynchronous frameworks that provide high-performance network and web servers, database connection libraries, distributed task queues, etc
+
+Asynchronous Programming with Asyncio in Python:
+
+
+async def fn():
+    print("hello")
+    await asyncio.sleep(2)
+    await fn2()
+    print("hii : sb bdia??")
+    await asyncio.sleep(3)
+    print("bye ")
+
+async def fn2():
+    print("bbyyeeee")
+    await asyncio.sleep(1)
+    print("wru")
+    await asyncio.sleep(3)
+    print("hru:")
+
+# asyncio.run(fn2())ṇnnnn
+asyncio.run(fn())
+
+
+I/O-bound tasks using asyncio.sleep():
+
+import asyncio
+
+
+async def func1():
+    print("Function 1 started..")
+    await asyncio.sleep(2)
+    print("Function 1 Ended")
+
+
+async def func2():
+    print("Function 2 started..")
+    await asyncio.sleep(3)
+    print("Function 2 Ended")
+
+
+async def func3():
+    print("Function 3 started..")
+    await asyncio.sleep(1)
+    print("Function 3 Ended")
+
+
+async def main():
+    L = await asyncio.gather(
+        func1(),
+        func2(),
+        func3(),
+    )
+    print("Main Ended..")
+
+
+asyncio.run(main())
+
+
+
+######################
+
+PEP 8 
+PEP 8 : Coding Style guide in Python
+
+
+Indeed coding and applying logic is the foundation of any programming language but there's also another factor that every coder must keep in mind while coding and that is the coding style. Keeping this in mind, Python maintains a strict way of order and format of scripting.Following this sometimes mandatory and is a great help on the user's end, to understand. Making it easy for others to read code is always a good idea, and adopting a nice coding style helps tremendously for that. For Python, PEP 8 has emerged as the style guide that most projects adhere to; it promotes a very readable and eye-pleasing coding style. Every Python developer should read it at some point; here are the most important points extracted for you: 
+
+
+1. Use 4-space indentation and no tabs.
+
+grow = function_name(variable_one, variable_two,
+                     variable_three, variable_four)
+
+
+
+#########
+def function_name(
+        variable_one, variable_two, variable_three,
+        variable_four):
+    print(variable_one)
+
+
+2. Use docstrings
+
+ def exam():
+    """This is single line docstring"""
+
+    """This is
+    a
+    multiline comment"""
+
+3. Wrap lines so that they don't exceed 79 characters :
+
+ with open('/path/from/where/you/want/to/read/file') as file_one, \
+     open('/path/where/you/want/the/file/to/be/written', 'w') as file_two:
+ file_two.write(file_one.read())  
+
+4. Use of regular and updated comments are valuable to both the coders and users:
+
+ geek = geek + 1                 # Increment
+
+ 5. Use of trailing commas : 
+tup = ("geek",)
+
+6. Use spaces around operators and after commas, but not directly inside bracketing constructs:
+a = f(1, 2) + g(3, 4)
+
+
+7. Naming Conventions :
+
+b (single lowercase letter)
+
+B (single upper case letter)
+
+lowercase
+
+lower_case_with_underscores
+
+UPPERCASE
+
+UPPER_CASE_WITH_UNDERSCORES
+
+CapitalizedWords (or CamelCase). This is also sometimes known as StudlyCaps.
+Note: While using abbreviations in CapWords, capitalize all the letters 
+of the abbreviation. Thus HTTPServerError is better than HttpServerError.
+
+mixedCase (differs from CapitalizedWords by initial lowercase character!)
+
+Capitalized_Words_With_Underscores
+
+
+8. Characters that should not be used for identifiers : 'l' (lowercase letter el), 'O' (uppercase letter oh), or 'I' (uppercase letter eye) as single character variable names as these are similar to the numerals one and zero.
+
+9.  Don’t use non-ASCII characters in identifiers if there is only the slightest chance people speaking a different language will read or maintain the code.
+
+10.  Name your classes and functions consistently : The convention is to use CamelCase for classes and lower_case_with_underscores for functions and methods. Always use self as the name for the first method argument.
+
+ 11. While naming of function of methods always use self for the first argument to instance methods and cls for the first argument to class methods.If a functions argument name matches with reserved words then it can be written with a trailing comma.
+
+ # Python program to find the
+# factorial of a number provided by the user. 
+
+# change the value for a different result 
+num = 7
+
+# uncomment to take input from the user 
+#num = int(input("Enter a number: ")) 
+
+factorial = 1
+
+# check if the number is negative, positive or zero 
+if num < 0: 
+    print("Sorry, factorial does not exist for negative numbers") 
+elif num == 0: 
+    print("The factorial of 0 is 1") 
+else: 
+    for i in range(1,num + 1): 
+        factorial = factorial*i 
+        
+print("The factorial of",num,"is",factorial)
+
+##########3
+
+# Import needed package
+from collections import defaultdict
+
+# Define our data
+list_data = [1, 2, 3, 4, 2, 4, 1, 2]
+
+
+# Helper Function
+def list_to_dict(input_list):
+    """Convert list to DefaultDict"""
+    d = defaultdict(int)
+    for i in input_list:
+        d[i] += 1
+    return d
+
+
+# Output
+print(ltd(list_data))
+
+
+################
+
+Closures And Decorators In Python
+
+Closures and decorators are powerful features in Python that allow for more advanced and flexible code patterns. Understanding these concepts can greatly enhance your ability to write clean, efficient, and reusable code.
+
+
+Closures in Python
+A closure in Python occurs when a nested function captures the local variables from its enclosing scope. This allows the nested function to access these variables even after the outer function has finished executing.
+
+How Closures Work
+Closures are created when:
+
+There is a nested function.
+The nested function references a value in its enclosing scope.
+The enclosing function returns the nested function.
+
+
+# code
+def outer_function(msg):
+    message = msg
+    
+    def inner_function():
+        print(message)
+    
+    return inner_function
+
+closure = outer_function("Hello, World!")
+closure()  # Output: Hello, World!
+
+
+
+Decorators in Python
+Python Decorators are a powerful and expressive tool in Python that allows you to modify the behavior of a function or method. They are often used to add "wrapping" functionality to existing functions in a clean and readable way.
+
+How Decorators Work
+A decorator is a function that takes another function as an argument, adds some kind of functionality, and returns a new function. 
+
+# code
+def simple_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@simple_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+
+
+Combining Closures and Decorators
+
+# code
+def count_calls(func):
+    def wrapper(*args, **kwargs):
+        wrapper.calls += 1
+        print(f"Call {wrapper.calls} of {func.__name__}")
+        return func(*args, **kwargs)
+    wrapper.calls = 0
+    return wrapper
+
+@count_calls
+def say_hello():
+    print("Hello!")
+
+say_hello()
+say_hello()
+
+#######################
+
+
+Memory Management in Python
+
+Understanding Memory allocation is important to any software developer as writing efficient code means writing a memory-efficient code. Memory allocation can be defined as allocating a block of space in the computer memory to a program. In Python memory allocation and deallocation method is automatic as the Python developers created a garbage collector for Python so that the user does not have to do manual garbage collection.
+
+
+Garbage Collection
+
+Garbage collection is a process in which the interpreter frees up the memory when not in use to make it available for other objects. Assume a case where no reference is pointing to an object in memory i.e. it is not in use so, the virtual machine has a garbage collector that automatically deletes that object from the heap memory.
+
+Memory Allocation in Python
+There are two parts of memory:
+stack memory
+heap memory
+
+
+Work of Stack Memory
+
+def func(): 
+      
+    # All these variables get memory  
+    # allocated on stack  
+    a = 20
+    b = [] 
+    c = ""
+
+
+Work of Heap Memory
+
+# This memory for 10 integers  
+# is allocated on heap.  
+a = [0]*10
+
+
+###################
+
+Multithreading in Python
+
+This article covers the basics of multithreading in Python programming language. Just like multiprocessing , multithreading is a way of achieving multitasking. In multithreading, the concept of threads is used.
+
+
+An Intro to Python Threading
+A thread is an entity within a process that can be scheduled for execution. Also, it is the smallest unit of processing that can be performed in an OS (Operating System). In simple words, a thread is a sequence of such instructions within a program that can be executed independently of other code. 
+
+
+An Intro to Threading in Python
+Multithreading is defined as the ability of a processor to execute multiple threads concurrently. In a simple, single-core CPU, it is achieved using frequent switching between threads. This is termed context switching . In context switching, the state of a thread is saved and the state of another thread is loaded whenever any interrupt (due to I/O or manually set) takes place. Context switching takes place so frequently that all the threads appear to be running parallelly (this is termed multitasking ).
+
+Multithreading in Python
+
+Step 1: Import Module
+
+First, import the threading module.
+
+import threading
+
+Step 2: Create a Thread
+
+To create a new thread, we create an object of the Thread class. It takes the 'target' and 'args' as the parameters. The target is the function to be executed by the thread whereas the args is the arguments to be passed to the target function.
+
+t1 = threading.Thread(target, args)
+t2 = threading.Thread(target, args)
+
+
+Step 3: Start a Thread
+
+To start a thread, we use the start() method of the Thread class.
+
+t1.start()
+t2.start()
+
+
+Step 4: End the thread Execution
+
+Once the threads start, the current program (you can think of it like a main thread) also keeps on executing. In order to stop the execution of the current program until a thread is complete, we use the join() method.
+
+t1.join()
+t2.join()
+
+
+import threading
+
+
+def print_cube(num):
+    print("Cube: {}" .format(num * num * num))
+
+
+def print_square(num):
+    print("Square: {}" .format(num * num))
+
+
+if __name__ =="__main__":
+    t1 = threading.Thread(target=print_square, args=(10,))
+    t2 = threading.Thread(target=print_cube, args=(10,))
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+    print("Done!")
+
+################
+
+
+
+import threading
+import os
+
+def task1():
+    print("Task 1 assigned to thread: {}".format(threading.current_thread().name))
+    print("ID of process running task 1: {}".format(os.getpid()))
+
+def task2():
+    print("Task 2 assigned to thread: {}".format(threading.current_thread().name))
+    print("ID of process running task 2: {}".format(os.getpid()))
+
+if __name__ == "__main__":
+
+    print("ID of process running main program: {}".format(os.getpid()))
+
+    print("Main thread name: {}".format(threading.current_thread().name))
+
+    t1 = threading.Thread(target=task1, name='t1')
+    t2 = threading.Thread(target=task2, name='t2')
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+
+
+
+Python ThreadPool
+A thread pool is a collection of threads that are created in advance and can be reused to execute multiple tasks. The concurrent.futures module in Python provides a ThreadPoolExecutor class that makes it easy to create and manage a thread pool.
+
+
+import concurrent.futures
+
+def worker():
+    print("Worker thread running")
+
+pool = concurrent.futures.ThreadPoolExecutor(max_workers=2)
+
+pool.submit(worker)
+pool.submit(worker)
+
+pool.shutdown(wait=True)
+
+print("Main thread continuing to run")
+
+#########################
+
+ Testing (PieTests, UnitTests)
+ 
+
+
+
