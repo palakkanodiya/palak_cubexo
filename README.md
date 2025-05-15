@@ -1,5 +1,5 @@
 # palak_cubexo
-
+DAY 1 12-MAY
 Operators
     Python divides the operators in the following groups:
 
@@ -328,8 +328,10 @@ Produces a printable string representation of a dictionary
 4	type(variable)
 Returns the type of the passed variable. If passed variable is dictionary, then it would return a dictionary type.
 
-
+#######################3
 DAY 2 --13 MAY
+
+
 EXCEPTION HANDLING
 
 
@@ -574,7 +576,8 @@ from datetime import date
 import time
 
 
-#######################  DAY 3 14 MAY
+####################### 
+DAY 3 14 MAY
 
 What is Package in Python?
 Package refers to a distribution of Python code that includes one or more modules or libraries. These packages are typically published on the Python Package Index (PyPI) and can be easily installed using pip. Python packages may contain modules, sub-packages, and additional resources such as documentation and data files.
@@ -1307,7 +1310,11 @@ print("Main thread continuing to run")
 
 #########################
 
- Testing (PieTests, UnitTests)
+DAY 4  15 MAY
+
+Testing (PieTests, UnitTests)
+
+
  
 
 
