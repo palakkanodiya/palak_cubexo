@@ -1314,8 +1314,318 @@ DAY 4  15 MAY
 
 Testing (PieTests, UnitTests)
 
+Pytest and Unittest are two popular options when it comes to Python testing frameworks. Pytest provides versatility and simplicity, enabling strong fixtures and succinct test code. However, Python's built-in testing framework, Unittest, offers a more conventional method with an object-oriented structure. For testing to be efficient and productive in Python projects, it is essential to understand the benefits and differences of each framework.
 
+
+unittest (or PyUnit):
+                    This is Python's built-in testing framework, inspired by Java's JUnit. It allows you to write test cases using classes and methods, and provides assertion methods for checking expected outcomes.
+
+                    
+pytest: 
+        This is a popular third-party testing framework that simplifies writing and running tests. It offers powerful features like fixtures (for setting up test environments), parameterized testing, and plugins for extending functionality.
  
+What is Pytest?
+
+                Pytest is a powerful and popular testing framework for Python that simplifies the process of writing and executing tests. It offers a more concise and readable syntax compared to Python's built-in unittest framework, making it easier for developers to write tests effectively. Pytest supports a wide range of test types, including unit tests, functional tests, and integration tests, allowing developers to test various aspects of their codebase. One of the key features of Pytest is its fixture mechanism, which enables the setup and teardown of test environments, data, and dependencies. This makes it easier to create and manage complex test scenarios.
+
+
+Features of Pytest
+
+Readability and Simplicity:
+                       It provides a more straightforward syntax than Unittest, which results in more readable and succinct test code. Tests are frequently written in a more organic, Python-like manner.
+Robust Features: 
+              It boasts an extensive feature set that includes robust assertion introspection, parameterization, and fixtures. Writing adaptable and maintainable test suites is facilitated by these capabilities.
+Third-party Plugins: 
+                Its capability is expanded by a wide range of third-party plugins. This enables developers to alter their testing procedures to suit their requirements.
+Automatic Test Discovery:
+                     Test Functions and Methods are automatically found and executed by Pytest, eliminating the need for explicit test discovery scripts. This reduces boilerplate code and streamlines the organization of tests.
+
+Advantages of Pytest
+
+Extensions: 
+         It can be made more functional by a large community of third-party plugins. This enables developers to alter their testing procedures to suit their requirements.
+Robust Features:
+             Pytest boasts an extensive feature set that includes robust assertion introspection, parameterization, and fixtures. Developers can create flexible and manageable test code with these features.
+Integration: 
+          Pytest easily interfaces with Jenkins and Travis CI continuous integration tools, as well as with other testing frameworks like Unittest and Nose.
+
+Disadvantages of Pytest
+
+Learning Curve: 
+             While Pytest is simple to use, developers who are new to the framework may find it difficult to keep up with its vast feature set. It could take some initial study to fully comprehend and utilize all of Pytest's features.
+Effort Required for Migration:
+                            It could take some work to convert test suites from other frameworks to Pytest, especially if the tests mostly rely on framework-specific features or standards.
+Dependency on External Libraries:
+                               Certain sophisticated capabilities, such as fixtures and parameterization, depend on external libraries. These libraries offer capabilities to Pytest, but they also introduce new dependencies that might need to be handled.
 
 
 
+What is Unittest?
+ 
+Unittest is a testing framework that comes with the standard Python library and is mostly utilized for unit testing. It offers a collection of classes and functions for arranging test suites, writing test cases, and executing tests. By subclassing unittest, developers can specify test cases with unittest.To make assertions and confirm expected behavior, use TestCase and methods like assertEqual, assertTrue, and assertRaises. The unittest test runner facilitates the automation of test execution and discovery,
+
+
+Features of Unittest
+
+Built-in to Python: 
+                    It is easily accessible without requiring any other dependencies because it is a part of the Python standard library. For applications with limited external dependencies, this may be helpful.
+Test Isolation: 
+                Generating distinct test cases for every unit being tested, promotes test isolation. Test cases and test suite organization may improve as a result.
+Assertion Methods:
+                It comes with a large number of built-in assertion methods that let developers make different kinds of assertions without the need for further libraries.
+Compatibility: 
+                It is a good option for projects where familiarity and consistency with common Python modules are important since it is extensively used and understood.
+                
+Advantages of Unittest
+
+Integration with IDEs: 
+                    It has built-in support in several integrated development environments (IDEs), including PyCharm and Visual Studio Code, which allows for the execution, discovery, and visualization of test results right within the IDE.
+Versatility:
+            It is a flexible testing framework that may be used to create functional, integration, and unit tests, among other test kinds. Due to its adaptability, developers can create tests for smaller functions and classes as well as larger components and modules at various stages of the software stack.
+Test Discovery: 
+                Test cases within Python modules and packages are automatically found and run by Unittest's built-in test discovery mechanism.
+                
+Disadvantages of Unittest
+
+Less Community Support: 
+                    Compared to other testing frameworks, it might have fewer third-party plugins and less community support, while being widely used. This can restrict developers who use Unittest in their applications from accessing extra functionality or support materials.
+Limited Flexibility: 
+                In comparison to some other testing frameworks, such as Pytest, it has fewer built-in capabilities and flexibility. Developers may find it more difficult to design sophisticated testing scenarios or modify testing procedures without using third-party libraries or workarounds as a result.
+Boilerplate Code:
+                Compared to other testing frameworks like Pytest, it necessitates writing more boilerplate code. This may result in repetitious and verbose test code, which would raise maintenance costs and make the code harder to read.
+
+#########################
+
+Django - Intro and Features
+
+What is Django?
+Django is a Python framework that makes it easier to create web sites using Python.
+
+Django takes care of the difficult stuff so that you can concentrate on building your web applications.
+
+Django emphasizes reusability of components, also referred to as DRY (Don't Repeat Yourself), and comes with ready-to-use features like login system, database connection and CRUD operations (Create Read Update Delete).
+
+Django is especially helpful for database driven websites.
+
+
+How does Django Work?
+Django follows the MVT design pattern (Model View Template).
+
+Model - The data you want to present, usually data from a database.
+View - A request handler that returns the relevant template and content - based on the request from the user.
+Template - A text file (like an HTML file) containing the layout of the web page, with logic on how to display the data.
+
+
+Model
+The model provides data from the database.
+
+In Django, the data is delivered as an Object Relational Mapping (ORM), which is a technique designed to make it easier to work with databases.
+
+The most common way to extract data from a database is SQL. One problem with SQL is that you have to have a pretty good understanding of the database structure to be able to work with it.
+
+Django, with ORM, makes it easier to communicate with the database, without having to write complex SQL statements.
+
+The models are usually located in a file called models.py.
+
+View
+A view is a function or method that takes http requests as arguments, imports the relevant model(s), and finds out what data to send to the template, and returns the final result.
+
+The views are usually located in a file called views.py.
+
+Template
+A template is a file where you describe how the result should be represented.
+
+Templates are often .html files, with HTML code describing the layout of a web page, but it can also be in other file formats to present other results, but we will concentrate on .html files.
+
+Django uses standard HTML to describe the layout, but uses Django tags to add logic:
+
+<h1>My Homepage</h1>
+
+<p>My name is {{ firstname }}.</p>
+The templates of an application is located in a folder named templates.
+
+
+URLs
+Django also provides a way to navigate around the different pages in a website.
+
+When a user requests a URL, Django decides which view it will send it to.
+
+This is done in a file called urls.py.
+
+
+So, What is Going On?
+
+Django receives the URL, checks the urls.py file, and calls the view that matches the URL.
+The view, located in views.py, checks for relevant models.
+The models are imported from the models.py file.
+The view then sends the data to a specified template in the template folder.
+The template contains HTML and Django tags, and with the data it returns finished HTML content back to the browser.
+
+
+Django Create Project
+
+My First Project
+django-admin startproject my_tennis_club
+
+Run the Django Project
+python manage.py runserver
+
+
+Django Create App
+
+Create App
+python manage.py startapp members
+
+##############
+Django Views
+
+Views
+
+Django views are Python functions that take http requests and return http response, like HTML documents.
+
+A web page that uses Django is full of views with different tasks and missions.
+
+Views are usually put in a file called views.py located on your app's folder.
+
+from django.shortcuts import render
+
+# Create your views here.
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def members(request):
+    return HttpResponse("Hello world!")
+
+
+###############
+
+Django URLs
+
+URLs
+Create a file named urls.py in the same folder as the views.py file, and type this code in it:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('members/', views.members, name='members'),
+]
+
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('', include('members.urls')),
+    path('admin/', admin.site.urls),
+]
+
+
+python manage.py runserver
+
+#################3
+
+Templates
+In the Django Intro page, we learned that the result should be in HTML, and it should be created in a template, so let's do that.
+
+Create a templates folder inside the members folder, and create a HTML file named myfirst.html.
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Hello World!</h1>
+<p>Welcome to my first Django project!</p>
+
+</body>
+</html>
+
+
+Modify the View
+Open the views.py file in the members folder, and replace its content with this:
+
+my_tennis_club/members/views.py:
+
+from django.http import HttpResponse
+from django.template import loader
+
+def members(request):
+  template = loader.get_template('myfirst.html')
+  return HttpResponse(template.render())
+
+
+Change Settings
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'members'
+]
+
+python manage.py migrate #run cmd
+
+python manage.py runserver #run server
+#########3
+
+
+Django Models
+
+A Django model is a table in your database.
+
+Django Models
+Up until now in this tutorial, output has been static data from Python or HTML templates.
+
+Now we will see how Django allows us to work with data, without having to change or upload files in the process.
+
+In Django, data is created in objects, called Models, and is actually tables in a database.
+
+Create Table (Model)
+
+from django.db import models
+
+class Member(models.Model):
+  firstname = models.CharField(max_length=255)
+  lastname = models.CharField(max_length=255)
+
+Migrate
+
+python manage.py makemigrations members
+
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Member',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('firstname', models.CharField(max_length=255)),
+                ('lastname', models.CharField(max_length=255)),
+            ],
+        ),
+    ]
+
+
+Run the migrate command:
+
+python manage.py migrate
+
+###########
+View SQL
+
+python manage.py sqlmigrate members 0001
+
+  
