@@ -1628,4 +1628,609 @@ View SQL
 
 python manage.py sqlmigrate members 0001
 
+
+###################
+
+DAY 5 16 MAY
+
+Django Insert Data
+
+Add Records
+The Members table created in the previous chapter is empty.
+
+We will use the Python interpreter (Python shell) to add some members to it.
+
+To open a Python shell, type this command:
+
+python manage.py shell
+
+>>> from members.models import Member
+>>>
+>>>  Member.objects.all()
+>>>
+>>> member = Member(firstname='Emil', lastname='Refsnes')
+>>> member.save()
+>>>
+>>>  Member.objects.all().values()
+
+
+#########33
+
+Add Multiple Records
+You can add multiple records by making a list of Member objects, and execute .save() on each entry:
+
+>>> member1 = Member(firstname='Tobias', lastname='Refsnes')
+>>> member2 = Member(firstname='Linus', lastname='Refsnes')
+>>> member3 = Member(firstname='Lene', lastname='Refsnes')
+>>> member4 = Member(firstname='Stale', lastname='Refsnes')
+>>> member5 = Member(firstname='Jane', lastname='Doe')
+>>> members_list = [member1, member2, member3, member4, member5]
+>>> for x in members_list:
+...   x.save()
+
+>>> Member.objects.all().values()
+
+##########
+Django Update Data
+
+Update Records
+To update records that are already in the database, we first have to get the record we want to update:
+
+>>> from members.models import Member
+>>> x = Member.objects.all()[4]
+
+>>> x.firstname
+
+>>> Now we can change the values of this record:
+
+>>> x.firstname = "Stalikken"
+>>> x.save()
+>>>
+>>> Execute this command to see if the Member table got updated:
+
+>>> Member.objects.all().values()
+
+#####################
+
+Delete Records
+To delete a record in a table, start by getting the record you want to delete:
+
+>>> from members.models import Member
+>>> x = Member.objects.all()[5]
+x will now represent the member at index 5, which is "Jane Doe", but to make sure, let us see if that is correct:
+
+>>> x.firstname
+This should give you this result:
+
+'Jane'
+Now we can delete the record:
+
+>>> x.delete()
+The result will be:
+
+(1, {'members.Member': 1})
+
+##########
+
+Insert Data
+
+First we enter the Python Shell:
+
+python manage.py shell
+
+
+
+t the bottom, after the three >>> write the following (and hit [enter] for each line):
+
+>>> from members.models import Member
+>>> x = Member.objects.all()[0]
+>>> x.phone = 5551234
+>>> x.joined_date = '2022-01-05'
+>>> x.save()
+This will insert a phone number and a date in the Member Model, at least for the first record, the four remaining records will for now be left empty. We will deal with them later in the tutorial.
+
+Execute this command to see if the Member table got updated:
+
+>>> Member.objects.all().values()
+The result should look like this:
+
+<QuerySet [
+{'id': 1, 'firstname': 'Emil', 'lastname': 'Refsnes', 'phone': 5551234, 'joined_date': datetime.date(2022, 1, 5)},
+{'id': 2, 'firstname': 'Tobias', 'lastname': 'Refsnes', 'phone': None, 'joined_date': None},
+{'id': 3, 'firstname': 'Linus', 'lastname': 'Refsnes', 'phone': None, 'joined_date': None},
+{'id': 4, 'firstname': 'Lene', 'lastname': 'Refsnes', 'phone': None, 'joined_date': None},
+{'id': 5, 'firstname': 'Stalikken', 'lastname': 'Refsnes', 'phone': None, 'joined_date': None}]>
+
+####################
+
+FORMS
+
+Django Forms
+Forms are used for taking input from the user in some manner and using that information for logical operations on databases. For example, Registering a user by taking input such as his name, email, password, etc.
+
+Django maps the fields defined in Django forms into HTML input fields. Django handles three distinct parts of the work involved in forms:
+
+Preparing and restructuring data to make it ready for rendering.
+CREATING HTML forms for the data.
+Receiving and processing submitted forms and data from the client.
+
+
+
+
+![flowChart-1-1024x682](https://github.com/user-attachments/assets/0daa394a-9c9b-4f54-8a2e-985074b8be50)
+
+syntax:
+
+ field_name = forms.FieldType(**options) 
+
+ from django import forms
+
+# creating a form
+class GeeksForm(forms.Form):
+    title = forms.CharField()
+    description = forms.CharField()
+
+
+Creating Forms in Django
+
+# import the standard Django Forms
+# from built-in library
+from django import forms 
   
+# creating a form  
+class InputForm(forms.Form): 
+  
+    first_name = forms.CharField(max_length = 200) 
+    last_name = forms.CharField(max_length = 200) 
+    roll_number = forms.IntegerField( 
+                     help_text = "Enter 6 digit roll number"
+                     ) 
+    password = forms.CharField(widget = forms.PasswordInput())
+
+
+
+##########
+MODEL FORM
+
+Create Django Form from Models
+
+Django ModelForm is a class that is used to directly convert a model into a Django form. If you’re building a database-driven app, chances are you’ll have forms that map closely to Django models.
+
+# import the standard Django Model
+# from built-in library
+from django.db import models
+  
+# declare a new model with a name "GeeksModel"
+class GeeksModel(models.Model):
+        # fields of the model
+    title = models.CharField(max_length = 200)
+    description = models.TextField()
+    last_modified = models.DateTimeField(auto_now_add = True)
+    img = models.ImageField(upload_to = "images/")
+  
+        # renames the instances of the model
+        # with their title name
+ def __str__(self):
+        return self.title
+#########
+
+To create a form directly for this model
+
+# import form class from django
+from django import forms
+ 
+# import GeeksModel from models.py
+from .models import GeeksModel
+ 
+# create a ModelForm
+class GeeksForm(forms.ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = GeeksModel
+        fields = "__all__"
+
+
+
+Django Forms Data Types and Fields List
+The most important part of a form and the only required part is the list of fields it defines. Fields are specified by class attributes. Here is a list of all Form Field types used in Django
+
+Name	Class	HTML Input
+BooleanField	class BooleanField(**kwargs)	CheckboxInput
+CharField	class CharField(**kwargs)	TextInput
+ChoiceField	class ChoiceField(**kwargs)	Select
+TypedChoiceField	class TypedChoiceField(**kwargs)	Select
+DateField	class DateField(**kwargs)	DateInput
+DateTimeField	class DateTimeField(**kwargs)	DateTimeInput
+DecimalField	class DecimalField(**kwargs)	NumberInput when Field.localize is False, else TextInput
+DurationField	class DurationField(**kwargs)	TextInput
+EmailField	class EmailField(**kwargs	EmailInput
+FileField	class FileField(**kwargs)	ClearableFileInput
+FilePathField	class FilePathField(**kwargs)	Select
+FloatField	class FloatField(**kwargs)	NumberInput when Field.localize is False, else TextInput
+ImageField	class ImageField(**kwargs)	ClearableFileInput
+IntegerField	class IntegerField(**kwargs)	NumberInput when Field.localize is False, else TextInput
+GenericIPAddressField	class GenericIPAddressField(**kwargs)	TextInput
+MultipleChoiceField	class MultipleChoiceField(**kwargs)	SelectMultiple
+TypedMultipleChoiceField	class TypedMultipleChoiceField(**kwargs)	SelectMultiple
+NullBooleanField	class NullBooleanField(**kwargs)	NullBooleanSelect
+RegexField	class RegexField(**kwargs)	TextInput
+SlugField	class SlugField(**kwargs)	TextInput
+TimeField	class TimeField(**kwargs)	TimeInput
+URLField	class URLField(**kwargs)	URLInput
+UUIDField	class UUIDField(**kwargs)	TextInput
+
+###################
+
+ Custom User Model (from scratch)
+
+ How to use User model in Django?
+
+ The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot of development and testing effort. It fits most of the use cases and is very safe. But sometimes we need to do some fine adjustment so to fit our Web application. Commonly we want to store a few more data related to our User but the next question might be that  how should a Django developer reference a User? The official Django docs list three separate ways:
+
+User
+AUTH_USER_MODEL
+get_user_model()
+
+
+Method 1 - User model Directly :
+
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
+class Post(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    content= models.TextField()
+    def __str__(self):
+        return self.title
+
+
+
+Method 2 - AUTH_USER_MODEL :
+
+AUTH_USER_MODEL is the recommended approach when referring to a user model in a models.py file.
+
+For this you need to create custom User Model by either subclassing AbstractUser or AbstractBaseUser.
+
+AbstractUser: Use this option if you are happy with the existing fields on the User model and just want to remove the username field.
+AbstractBaseUser: Use this option if you want to start from scratch by creating your own, completely new User model.
+
+
+
+# blog/models.py
+from django.conf import settings
+from django.db import models
+
+class Post(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    content = models.TextField()
+
+
+
+Method 3 - get_user_model() :
+
+If you reference User directly (for example, by referring to it in a foreign key), your code will not work in projects where the AUTH_USER_MODEL setting has been changed to a different user model.
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+User=get_user_model()
+# Create your models here.
+class Post(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    content= models.TextField()
+    def __str__(self):
+        return self.title
+
+################
+
+META CLASS IN MODELS
+
+Model Meta is basically the inner class of your model class. Model Meta is basically used to change the behavior of your model fields like changing order options,verbose_name, and a lot of other options. It's completely optional to add a Meta class to your model. In order to use model meta you have to add class Meta in your model as shown below as follows: 
+
+class student(models.Model):
+    class Meta:
+     .....
+
+
+
+Model Meta Options
+Model Meta has a lot of options that you can give your model in its internal class meta
+
+1. abstract
+
+If abstract = True, this model will be an abstract  base class
+class student(models.Model):
+  class Meta:
+      abstract = True
+
+      
+    
+2. app_label
+
+If a model is defined outside of applications in INSTALLED_APPS, it must declare which app  it belongs to:
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      app_label = 'myapp' # add app name here
+
+
+      
+3. verbose_name
+
+verbose_name is basically a human-readable name for your model
+
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      verbose_name = "stu" # add verbose_name  here
+
+
+
+      
+4. ordering 
+
+Ordering is basically used to change the order of your model fields.
+
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      ordering = [-1]
+Add ordering like this [-1] it changes the order in descending order
+
+
+
+5. proxy
+
+If we add proxy = True a model which subclasses another model will be treated as a proxy model
+
+1
+class Teacher(models.Model):
+2
+  pass
+3
+​
+4
+class Student(Teacher):
+5
+  class Meta:
+6
+      proxy = True
+This is how can we make a  proxy model.
+
+
+
+6. permissions 
+
+Extra permissions to enter into the permissions table when creating this object. Add, change, delete and view permissions are automatically created for each model.
+
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      permissions = []
+You can add extra permission inside the list.
+
+
+
+7. db_table
+
+We can overwrite the table name by using db_table in meta class.
+
+
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      db_table = 'X'
+This will change the table name to X.
+
+
+
+
+8. get_latest_by
+
+
+It returns the latest object in the table based on the given field, used for typically DateField, DateTimeField, or IntegerField.
+
+
+1
+class student(models.Model):
+2
+  class Meta:
+3
+      get_latest_by = "order_date"
+Return the latest by ascending order_date.
+
+
+###############################
+
+FILE UPLOAD AND MEDIA HANDLING 
+
+Uploading an Image
+Before starting to play with an image, make sure you have the Python Image Library (PIL) installed. Now to illustrate uploading an image, let's create a profile form, in our myapp/forms.py −
+
+#-*- coding: utf-8 -*-
+from django import forms
+
+class ProfileForm(forms.Form):
+   name = forms.CharField(max_length = 100)
+   picture = forms.ImageFields()
+As you can see, the main difference here is just the forms.ImageField. ImageField will make sure the uploaded file is an image. If not, the form validation will fail.
+
+Now let's create a "Profile" model to save our uploaded profile. This is done in myapp/models.py −
+
+from django.db import models
+
+class Profile(models.Model):
+   name = models.CharField(max_length = 50)
+   picture = models.ImageField(upload_to = 'pictures')
+
+   class Meta:
+      db_table = "profile"
+As you can see for the model, the ImageField takes a compulsory argument: upload_to. This represents the place on the hard drive where your images will be saved. Note that the parameter will be added to the MEDIA_ROOT option defined in your settings.py file.
+
+Now that we have the Form and the Model, let's create the view, in myapp/views.py −
+
+#-*- coding: utf-8 -*-
+from myapp.forms import ProfileForm
+from myapp.models import Profile
+
+def SaveProfile(request):
+   saved = False
+   
+   if request.method == "POST":
+      #Get the posted form
+      MyProfileForm = ProfileForm(request.POST, request.FILES)
+      
+      if MyProfileForm.is_valid():
+         profile = Profile()
+         profile.name = MyProfileForm.cleaned_data["name"]
+         profile.picture = MyProfileForm.cleaned_data["picture"]
+         profile.save()
+         saved = True
+   else:
+      MyProfileForm = Profileform()
+		
+   return render(request, 'saved.html', locals())
+The part not to miss is, there is a change when creating a ProfileForm, we added a second parameters: request.FILES. If not passed the form validation will fail, giving a message that says the picture is empty.
+
+Now, we just need the saved.html template and the profile.html template, for the form and the redirection page −
+
+myapp/templates/saved.html −
+
+<html>
+   <body>
+   
+      {% if saved %}
+         <strong>Your profile was saved.</strong>
+      {% endif %}
+      
+      {% if not saved %}
+         <strong>Your profile was not saved.</strong>
+      {% endif %}
+      
+   </body>
+</html>
+myapp/templates/profile.html −
+
+<html>
+   <body>
+   
+      <form name = "form" enctype = "multipart/form-data" 
+         action = "{% url "myapp.views.SaveProfile" %}" method = "POST" >{% csrf_token %}
+         
+         <div style = "max-width:470px;">
+            <center>  
+               <input type = "text" style = "margin-left:20%;" 
+               placeholder = "Name" name = "name" />
+            </center>
+         </div>
+			
+         <br>
+         
+         <div style = "max-width:470px;">
+            <center> 
+               <input type = "file" style = "margin-left:20%;" 
+                  placeholder = "Picture" name = "picture" />
+            </center>
+         </div>
+			
+         <br>
+         
+         <div style = "max-width:470px;">
+            <center> 
+            
+               <button style = "border:0px;background-color:#4285F4; margin-top:8%; 
+                  height:35px; width:80%; margin-left:19%;" type = "submit" value = "Login" >
+                  <strong>Login</strong>
+               </button>
+               
+            </center>
+         </div>
+         
+      </form>
+      
+   </body>
+</html>
+Next, we need our pair of URLs to get started: myapp/urls.py
+
+from django.conf.urls import patterns, url
+from django.views.generic import TemplateView
+
+urlpatterns = patterns(
+   'myapp.views', url(r'^profile/',TemplateView.as_view(
+      template_name = 'profile.html')), url(r'^saved/', 'SaveProfile', name = 'saved')
+)
+When accessing "/myapp/profile", we will get the following profile.html template rendered −
+
+
+     ![uploading_image](https://github.com/user-attachments/assets/e22ef540-9728-48bd-a529-ff625a877afa)
+
+And on form post, the saved template will be rendered 
+
+     ![form_post_template](https://github.com/user-attachments/assets/81c65f48-c8c1-4d44-a640-e3cb984960b4)
+
+
+
+#############
+
+HANDLE MEDIA FILE
+
+In Django Media files are the files uploaded by users on the system. However, like static files media files shouldn't be trusted.
+
+
+There are always security concerns when dealing with user-uploaded content. Notably, it’s important to validate all uploaded files. Django offers a large degree of flexibility to manage user uploads.
+
+
+Configuring Media Files in Django
+Open settings.py file of your project and add the following configuration.
+
+# Base url to serve media files
+MEDIA_URL = '/media/'
+
+# Path where media is stored'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+CopyCopyCopy
+# Older versions of Django that use os module for path traversal do this instead
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+Copy
+MEDIA_URL is the URL that will serve the media files.
+
+During development, it doesn't matter much as long it doesn't conflict with any view of the apps. In production, uploaded files should be served from a different domain such as Amazon S3.
+
+MEDIA_ROOT is the path to the root directory where the files are getting stored.
+
+
+Serving Media Files in Development
+By default, Django doesn't serve media files during development( when debug=True).
+
+In order to make the development server serve the media files open the url.py of the project and make the below changes.
+
+url.py
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    ...]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
+
+  
+That's all now, run the local development server add files in the media root folder and retrieve them from media URL.
+
+
+
