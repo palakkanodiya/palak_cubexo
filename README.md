@@ -2233,4 +2233,1179 @@ if settings.DEBUG:
 That's all now, run the local development server add files in the media root folder and retrieve them from media URL.
 
 
+#####################
+
+DAY 6 19-MAY
+
+ Django - Pagination in Django
+
+
+1. What is Pagination?
+Pagination is the process of dividing a large dataset into smaller sets or pages. Each page contains a limited number of items, and users can navigate through pages.
+
+
+2. Setup Django Project
+First, create & activate virtualenv and also create Django project and app if you haven’t already.
+
+mkdir myproject
+cd myproject
+
+python -m venv venv # create virtualenv
+source venv\bin\activate # activate the virtualenv
+
+django-admin startproject myproject .
+python manage.py startapp myapp
+
+
+Update INSTALLED_APPS in your settings.py to include the app:
+
+INSTALLED_APPS = [
+    # Other apps
+    'myapp',
+]
+
+
+3. Setting Up Models
+Let’s create a simple Post model to display as paginated content.
+
+# myapp/models.py
+from django.db import models
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+Now, make migrations and migrate the model:
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+ You can also add some sample data in the Django admin panel or use the shell:
+
+python manage.py shell
+from myapp.models import Post
+
+for i in range(1, 101):
+    Post.objects.create(title=f"Post {i}", content=f"Content for post {i}")
+
+
+4. Creating a View with Pagination
+Django provides the Paginator class for handling pagination. Let's create a view to paginate the Post objects.
+
+# myapp/views.py
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import Post
+
+
+def post_list(request):
+    posts = Post.objects.all()
+    paginator = Paginator(posts, 10)  # Show 10 posts per page.
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'myapp/post_list.html', {'page_obj': page_obj})
+
+
+5. Using Pagination in Templates
+Now, let’s create the template to display the paginated posts.
+
+<!-- myapp/templates/myapp/post_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginated Post List</title>
+</head>
+<body>
+    <h1>Paginated Posts</h1>
+
+    <ul>
+        {% for post in page_obj %}
+            <li>{{ post.title }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        <span>
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <strong>{{ num }}</strong>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+
+
+6. Handling Edge Cases
+Empty Pages: When a user requests a page that doesn’t exist (e.g., page=1000), Django raises an EmptyPage exception. You can handle this in your view:
+# myapp/views.py
+from django.core.paginator import EmptyPage, PageNotAnInteger
+
+def post_list(request):
+    posts = Post.objects.all()
+    paginator = Paginator(posts, 10)
+    
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    
+    return render(request, 'myapp/post_list.html', {'page_obj': page_obj})
+
+
+
+##################
+
+Django : Class Based Views vs Function Based Views
+
+Django has two types of views; function-based views (FBVs), and class-based views (CBVs). Django originally started out with only FBVs, but then added CBVs as a way to templatize functionality so that you didn’t have to write boilerplate (i.e. the same code) code over and over again.
+
+At their core, CBVs are Python classes. Django ships with a variety of “template” CBVs that have pre-configured functionality that you can reuse and oftentimes extend. These classes are then given helpful names that describe what kind of functionality they provide. You’ll often see these referred to as “generic views” because they provide solutions to common requirements. The classes have documentation on Django’s project site that shows what functionality is offered, what settings are required or possible, and how to extend them.
+
+
+
+As a reminder, Django’s views have three requirements:
+
+They are callable. A view can be either function or a class-based view. CBVs inherit the method as_view() which uses a dispatch() method to call the appropriate method depending on the HTTP verb (get, post, etc)
+They must accept an HttpRequest object as its first positional argument
+They must return an HttpResponse object or raise an exception.
+
+
+Function Based Views
+Pros
+Simple to implement
+Easy to read
+Explicit code flow
+Straightforward usage of decorators
+good for one-off or specialized functionality
+Cons
+Hard to extend and reuse the code
+Handling of HTTP methods via conditional branching
+This function is very easy to implement and it’s very useful but the main disadvantage is that on a large Django project, usually a lot of similar functions in the views . If all objects of a Django project usually have CRUD operations so this code is repeated again and again unnecessarily and this was one of the reasons that the class-based views and generic views were created for solving that problem.
+
+CODE
+
+def my_create_view(request, pk):
+  template_name = 'form.html'
+  form_class = MyForm
+
+  form = form_class
+
+  if request.method == 'POST':
+    form = form_class(request.POST)
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('list-view'))
+
+  return render(request, template_name, {'form': form})
+
+
+  
+Class Based Views
+Class-based views provide an alternative way to implement views as Python objects instead of functions. They do not replace function-based views, but have certain differences and advantages when compared to function-based views.
+
+Pros
+Code reuseability — In CBV, a view class can be inherited by another view class and modified for a different use case.
+DRY — Using CBVs help to reduce code duplication
+Code extendability — CBV can be extended to include more functionalities using Mixins
+Code structuring — In CBVs A class based view helps you respond to different http request with different class instance methods instead of conditional branching statements inside a single function based view.
+Built-in generic class-based views
+Cons
+Harder to read
+Implicit code flow
+Use of view decorators require extra import, or method override
+
+CODE
+
+class MyCreateView(View):
+  template_name = 'form.html'
+  form_class = MyForm
+
+  def get(self, request, *args, **kwargs):
+    form = self.form_class
+    return render(request, template_name, {'form': form})
+
+  def post(self, request, *args, **kwargs):
+    form = self.form_class(request.POST)
+    if form.is_valid():
+      form.save()
+      return HttpResonseRedirect(reverse('list-view'))
+    else:
+      return render(request, self.template_name, {'form': form})
+
+
+
+Django Generic Class-Based Views
+The generic class-based-views was introduced to address the common use cases in a Web application, such as creating new objects, form handling, list views, pagination, archive views and so on.They come in the Django core, and you can implement them from the module django.views.generic.
+
+They are great and can speed up the development process.
+
+Django provides a set of views and mixins, generic class-based views, which aim to solve some of the most common tasks in web development. The goal isn’t in reducing boiler plate, per se, but rather to prevent you from having to reinvent the wheel over and over. Let’s modify MyCreateView to inherit fromdjango.views.generic.CreateView:
+
+from django.views.generic import CreateView 
+class MyCreateView(CreateView):
+    model = MyModel  
+    form_class = MyForm
+
+
+#################
+
+from django import forms
+from . models import MyModel 
+class MyModelForm(forms.ModelForm):
+  class Meta:
+    model = MyModel
+    fields = ['name', 'description']
+
+
+
+Conclusion
+
+There is no right or wrong. It all depends on the context and the needs. As I mentioned in the beginning of this post, class-based views does not replace function-based views. There are cases where function-based views are better. In other cases class-based views are better.
+
+#########################
+
+ Django - JINJA
+
+Introduction
+Jinja is the most popular template engine for Python projects and is used in projects like Flask, Django, and Ansible; it has recently gained popularity also for interaction with databases in combination with SQL, partly thanks to its use in popular tools such as dbt.
+
+Using a template you can separate the structure of your document from its varying parts (input data): this means that you can reuse the same structure without restarting from scratch.
+
+Template syntax:--
+Hello {{ name }}!
+
+###########
+Hello {{ name }},
+
+{% if message %}
+  There is a new message for you: "{{ message }}".
+{% else %}
+  There is no new message for you.
+{% endif %}
+
+output--
+Hello palak,
+There is a new message for you: "Hey, how are you?".
+
+
+
+Jinja templates use the following delimiters:
+
+{{ ... }} for expressions and variables (such as message in the above example)
+{% ... %} for statements (such as if/else/endif)
+{%- ... -%} same as the above, but stripping whitespaces before and/or after the block
+{# ... #} for comments
+
+
+##################3
+Key features
+Jinja is particularly powerful because it offers a lot of flexibility while also being easy to use. A shortlist of its key features includes:
+
+control structures
+filters
+tests
+macros
+template inheritance
+############
+
+
+Control structures
+		Jinja provides a set of control structures that allow you to conditionally display content, loop through data, and more.
+
+Conditionals
+	Conditionals use the if/elif/else syntax, as in the following example:
+
+example--
+
+{% if user.age < 10 %}
+  Child
+{% elif user.age < 18 %}
+  Teenager
+{% else %}
+  Adult
+{% endif %}
+
+
+#########
+
+Tests
+	Jinja also offers a builtin set of tests, that can be used to test a variable against an expression. The expression may check the value of the variable or its type.
+
+
+{% if variable is test_name %}
+  # ...
+{% endif %}
+
+#####
+
+Loops
+	Loops use the for control structure, optionally followed by an else branch as in the following example, to perform some action if the input list was empty:
+
+ {% for user in users %}
+  {{ user.username }}
+{% else %}
+  No users found
+{% endfor %}
+
+
+#######
+
+Filters
+Filters are a way to perform basic transformations to variables before they are rendered. You add them to variables using a pipe (|) character followed by the filter name and any arguments, if required. There are many built-in filters provided by Jinja and it's also possible to create custom filters.
+
+examples:
+
+1} Capitalizing the first letter of a string
+
+{{ "hello world"|capitalize }}
+
+output:
+Hello world
+
+2} Sorting elements in a list in reverse order
+
+{% for num in [ 42, 99, 7 ]|sort(reverse=true) %}
+  {{ num }}
+{% endfor %}
+
+output:
+99
+42
+7
+
+3}Getting the maximum value in a list of numbers
+
+{{ [ 42, 99, 7 ]|max }}
+
+output:
+99
+
+4}It's important to note that multiple filters can be used in sequence. For example:
+{{ [ 42.1, 99.9, 7.5 ]|max|round }}
+
+
+############
+Macros
+	You can use macros to define custom functions that can then be called multiple times within the template, reducing code duplication and improving maintainability.
+
+
+ {% macro where_clause(filters) -%}
+  {% set ns = namespace(clauses = []) -%}
+  {% for field, value in filters.items() -%}
+    {% set clause = field + " = " + value -%}
+    {% set ns.clauses = ns.clauses + [clause] -%}
+  {% endfor -%}
+  WHERE {{ " AND ".join(ns.clauses) }}
+{%- endmacro -%}
+
+SELECT * FROM users {{ where_clause({"name": "John", "age": "25"}) }};
+
+##########
+Template inheritance
+			Using template inheritance you can create a base template with common content and structure, and then inherit from it in child templates to add specific content or variations. This can save you a lot of time and effort in content generation, as the base template only needs to be defined once.
+
+
+# parent.txt
+
+WITH customer_names AS (
+{% block cte %}{% endblock %}
+)
+SELECT *
+FROM customer_names;
+
+# child.txt
+
+{% extends 'parent.txt' %}
+{% block cte %}
+SELECT first_name, last_name
+FROM customers
+{% endblock %}
+
+
+WITH customer_names AS (
+SELECT first_name, last_name
+FROM customers
+)
+SELECT *
+FROM customer_names;
+
+############
+VARIABLES:
+
+Jinja variables in Python
+			Working in Python, the simplest way to set variables is as a Dictionary. You can then use your dictionary as an argument for the .render() method of the Jinja Template.
+
+
+
+   from jinja2 import Template
+
+# Define query variables
+variables = {
+  "column": "value",
+  "min_date": "2022-01-01",
+  "max_date": "2022-12-31"
+}
+
+# Create a Jinja template for the query
+template = Template("""
+SELECT * FROM table
+WHERE column = '{{ column }}'
+AND date BETWEEN '{{ min_date }}' AND '{{ max_date }}'
+""")
+
+# Render the template along with the variables
+query = template.render(variables)
+
+# Print the results
+print(query)
+
+###############
+CONDITIONAL
+	You can dynamically change the result of your template based on input data using Jinja's conditionals.
+
+#
+if:==
+
+ {%- if order_amount >= 50 -%}
+	No shipping costs.
+{%- endif -%}
+
+#
+if else:==
+
+{%- if order_amount < 50 -%}
+	Shipping costs apply.
+{%- else -%}
+	No shipping costs.
+{%- endif -%}
+
+#
+if - elif - else:==
+
+{%- if order_amount < 10 -%}
+	Shipping costs: 5€
+{%- elif order_amount < 25 -%}
+	Shipping costs: €3
+{%- elif order_amount < 50 -%}
+	Shipping costs: €1
+{%- else -%}
+	Shipping costs: €0
+{%- endif -%}
+
+
+Comparison operators
+You can compare variables or values using comparison operators:
+
+==: equal to
+!=: not equal to
+>: greater than
+<: less than
+>=: greater than or equal to
+<=: less than or equal to
+
+
+Logical operators
+You can combine several comparisons into one using logical operators:
+
+and: returns True if both comparison expressions are True
+or: returns True if at least one comparison expression is True
+not: returns True if the comparison expression is False (and viceversa)
+##########
+{% set order_amount=5 %}
+
+{% if order_amount >=0 and order_amount < 10 %}
+	Shipping costs: 5€
+{% endif %}
+
+####
+{% set order_amount=10 %}
+{% set user_has_discount=True %}
+
+{% if order_amount >= 50 or user_has_discount %}
+	No shipping costs.
+{% endif %}
+
+###########
+{% set enabled=False %}
+
+{% if not enabled %}
+	Disabled.
+{% endif %}
+
+################
+
+Truthiness
+Certain values are considered truthy by Jinja, while others are considered falsy: when you use an expression in a conditional statement, its value is first evaluated and then treated as either True or False based on its truthiness.
+
+The following values are considered falsy by Jinja:
+
+False
+None
+0 (integer)
+0.0 (float)
+empty strings (e.g. '')
+empty lists (e.g. [])
+empty dictionaries (e.g. {})
+empty sets (e.g. set())
+
+EXAMPLE:---
+
+{% set n=0 %}
+{% set s='' %}
+{% set l=['a'] %}
+
+{% if n %}
+	n is truthy
+{% elif s %}
+	s is truthy
+{% elif l %}
+	l is truthy
+{% else %}
+  none of them is truthy
+{% endif %}
+
+#############3
+
+Tests
+	Tests in Jinja2 are used to evaluate variables and determine if they pass a certain condition. They return a boolean value of either True or False, based on the outcome of the test.
+To use this feature, simply add the is keyword followed by the test name after the variable
+
+{% if variable is defined %} 
+	Variable is defined
+{% else %}
+	Variable is undefined
+{% endif %}
+
+These tests can help you catch type mismatches and prevent errors from being thrown by Jinja.
+
+boolean - check is variable is a boolean
+integer - check if variable is an integer
+float - check if variable is a float
+number - check if variable is number, will return True for both integer and float
+string - check if variable is a string
+mapping - check if variable is a mapping, i.e. dictionary
+iterable - check if variable can be iterated over, will match string, list, dict, etc.
+sequence - check if variable is a sequence
+
+An example :
+{% if variable is iterable %}
+	{% for item in variable %}
+		{{ item }}
+	{% endfor %}
+{% else %} 
+	{{ variable }}
+{% endif %}
+
+
+# using the comparison operator
+{% if x > 0 %}
+	x is positive
+{% endif %}
+
+# using the equivalent test
+{% if x is gt 0 %}
+	x is positive
+{% endif %}
+
+################3
+LOOPS
+	Jinja's for loops enable you to iterate over data structures such as lists, dictionaries, and tuples, to produce dynamic content. For instance, you can use a loop to generate a list of blog posts on a website or display the names of all team members on a company page.
+
+ 
+{% for key, value in my_dict.items() %}
+	{{ key }} = {{ value }}
+{% endfor %}
+########
+Use an else statement
+
+{% for customer in customers %}
+	{{ customer.name }}
+{% else %}
+	No customer.
+{% endfor %}
+
+############
+Use loop-specific variables
+
+{%- for customer in customers -%}
+	{% if not loop.first %},{% endif %}{{ customer.name -}}
+{% endfor %}
+
+##############
+
+Here is an overview of the loop-specific variables, while the complete list is available here:
+
+Variable
+
+Description
+
+loop.index
+
+The current iteration of the loop. (1 indexed)
+
+loop.revindex
+
+The number of iterations from the end of the loop (1 indexed)
+
+loop.first
+
+True if first iteration.
+
+loop.last
+
+True if last iteration.
+
+loop.length
+
+The number of items in the sequence.
+
+loop.cycle
+
+Cycle through a given list of strings or variables. E.g.: {{ loop.cycle('odd', 'even') }}
+
+loop.previtem
+
+The item from the previous iteration of the loop. Undefined during the first iteration.
+
+loop.nextitem
+
+The item from the following iteration of the loop. Undefined during the last iteration.
+
+loop.changed(*val)
+
+True if previously called with a different value (or not called at all).
+
+###############
+
+Filter elements
+You can use an if statement to filter the sequence during iteration, allowing you to skip those elements (if any) that do not meet the condition.
+
+For example:
+
+
+{% for customer in customers if customer.is_business %}
+	{{ customer.name }}
+{% else %}
+	No customer.
+{% endfor %}
+
+####################
+
+Filters
+
+ou can add a filter to a variable using a pipe (|) character followed by the filter name and any arguments, if required. For example:
+
+
+{{ "hello world" | title }}
+
+# result
+"Hello World"
+
+#############3
+
+Multiple filters can be chained together in a single expression, as in the following example:
+
+
+{{ ["hello", "world"] | join(" ") | title }}
+
+# result
+"Hello World"
+
+##################
+
+Filter categories
+Built-in filters can be categorized based on their functionality:
+
+String filters: these include the capitalize,  lower,  upper,  title,  trim, striptags, and escape filters. These filters are useful for formatting text for display purposes.
+List filters: these include the join,  first,  last,  length,  reverse, sort, map,  select, and reject filters. These filters are useful for manipulating list data.
+Numeric filters: these include the abs, float, int, round, and random filters. These filters are useful for performing mathematical operations.
+Miscellaneous filters: these include the default,  batch filters. These filters are used for a variety of purposes such as providing default values and splitting lists into smaller lists.
+
+###########
+
+String filters
+escape
+The escape filter  replaces those characters in the string that belong to the HTML syntax (&, <, >, ', and ") with HTML-safe sequences.
+
+
+{{ "42 > 12" | escape }}
+
+# result
+"42 > 12"
+
+#############################33
+format
+The format filter lets you define a printf-style format string.
+
+
+{% set text = "The answer is" %}
+{% set num = 42 %}
+
+{{ "%s %d" | format(text, num) }}
+
+# result
+"The answer is 42"
+
+##############################3
+replace
+The replace filter replaces the old string with the new one.
+
+
+{{ "hello world" | replace(old="world", new="Jinja" }}
+
+# result
+hello Jinja
+
+#########################3
+truncate
+The truncate filter truncates the string at the specified length (including the 3 characters of the ellipsis). By default, it discards the last word instead of truncating at the exact length, but this can be changed.
+
+
+{{ "Lorem ipsum dolor sit amet, consectetur adipiscing elit." | truncate(20) }}
+
+# result
+"Lorem ipsum..."
+
+3############################################
+
+{{ "Lorem ipsum dolor sit amet, consectetur adipiscing elit." | truncate(20, killwords=True) }}
+
+# result
+"Lorem ipsum dolor..."
+upper
+Upper converts all letters in the string to upper case.
+
+################################################3
+{{ "hello world" | upper }}
+
+# result
+"HELLO WORLD"
+
+#########################################3
+Iterable filters
+groupby
+The groupby filter lets you group items in a collection according to one of their attributes.
+
+
+{% set users = [{'name': 'Sofia', 'city': 'Berlin'}, {'name': 'Mark', 'city': 'Berlin'}, {'name': 'Wouter', 'city': 'Hamburg'}] %}
+
+{% for city, items in users | groupby('city') %}
+	{{ city }}
+	{% for user in items %}
+		{{ user.name }}
+	{% endfor %}
+{% endfor %}
+
+# result
+Berlin
+	Sofia
+	Mark
+
+Hamburg
+	Wouter
+ ###############################
+map
+The map filter lets you transform the values in a list, for example extracting a single attribute as in the following snippet
+
+
+{% set users = [{'name': 'Sofia', 'city': 'Berlin'}, {'name': 'Mark', 'city': 'Berlin'}, {'name': 'Wouter', 'city': 'Hamburg'}] %}
+
+{% for name in users | map(attribute='name') %}
+  {{ name }}
+{% endfor %}
+
+# result
+Sofia
+Mark
+Wouter
+
+########################3
+Macros
+	Macros are user-defined named blocks that you can use multiple times in your templates, reducing repetition. They are equivalent to functions in programming languages. You start the macro definition using the macro keyword and end it using endmacro.
+
+ {%- macro if_null(column, default_value) -%}
+    coalesce({{ column }}, '{{ default_value }}') as {{ column }}
+{%- endmacro -%}
+
+SELECT 
+    {{ if_null('first_name', 'N/A') }},
+    {{ if_null('last_name', 'N/A') }},
+    {{ if_null('business_name', 'N/A') }},
+    {{ if_null('business_vat_id', 'N/A') }}
+FROM learnsql.invoices
+;
+
+####################3
+Template inheritance
+			The template inheritance feature allows you to create a base template with common content and structure, and then inherit from it in child templates to add specific content or variations. One significant advantage of using template inheritance is that it enables you to establish a consistent layout across multiple templates: this can save you a lot of time and effort, as the base template only needs to be defined once and can then be reused at will.
+
+
+  <!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}Default Title{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <h1>My Website</h1>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
+
+
+#########################
+
+DJANGO:-EMAIL SENDING
+
+How to Send Emails With Django:--
+
+If you're building a Django app and you want to connect with users – maybe to welcome them, send password reset links, or deliver updates – email is one of the best tools you’ve got.
+
+Setting up email in Django might sound tricky at first, but it's pretty straightforward once you get the hang of it.
+
+I’ve walked a bunch of people through it, and by the end of this guide, you’ll feel confident about sending emails from your own Django projects.
+###########
+
+
+Why Email Matters in Web Apps
+Email isn’t just a nice-to-have – it's essential for communication, trust, and user experience.
+
+Think about it:
+
+How do you confirm someone’s account? Email.
+
+How do you help users reset a password? Email.
+
+Want to send updates, alerts, or custom reports? You guessed it – email.
+
+
+
+##########
+
+Here’s what I’ll walk you through:
+
+How to set up email in Django
+
+How to choose between development and production settings
+
+How to send basic emails
+
+How to send HTML and multi-part emails
+
+How to use templates for emails
+
+Common mistakes to avoid
+###########
+
+How to Send Emails With Django:--
+
+Step 1: Configure Your Email Settings in Django
+Django uses the EmailMessage class and the built-in send_mail function to send emails. But first, you have to tell Django how to connect to your email provider.
+
+Open your settings.py file and add your email backend configuration.
+
+Here’s an example using Gmail:
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'palak@gmail.com'
+EMAIL_HOST_PASSWORD = 'Palak@123'
+
+###########
+For Development
+If you're just testing emails locally and don’t want to actually send anything, Django makes it easy.
+
+Use this in your settings.py:
+
+# Settings.oy
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#################
+
+Step 2: Sending a Simple Email
+Now that your settings are in place, you can send an email with just a few lines of code.
+
+Here’s a quick example using Django’s send_mail function:
+
+# Views.py or anywhere you want this logic to live
+
+from django.core.mail import send_mail
+
+send_mail(
+    'Welcome to My Site!',
+    'Thanks for signing up. Glad to have you!',
+    'from@example.com',        # From
+    ['to@example.com'],        # To
+    fail_silently=False,
+)
+
+#############
+
+Step 3: Sending HTML Emails
+Plain text is okay, but HTML emails look way better. Django lets you send multi-part messages that include both plain text and HTML.
+
+Here’s how:
+
+from django.core.mail import EmailMultiAlternatives
+
+subject = 'Welcome!'
+text_content = 'Thanks for joining us.'
+html_content = '<p>Thanks for <strong>joining</strong> us.</p>'
+
+msg = EmailMultiAlternatives(subject, text_content, 'from@example.com', ['to@example.com'])
+msg.attach_alternative(html_content, "text/html")
+msg.send()
+
+###############
+
+Step 4: Use Templates for Better Emails
+If you're sending emails with similar structure – like a welcome message or invoice – it makes sense to use templates.
+
+Create a file like welcome_email.html in your templates folder:
+
+<!-- templates/welcome_email.html -->
+<h2>Hello {{ user.first_name }}!</h2>
+<p>Welcome to our platform. We’re happy you’re here.</p>
+
+hen, load and render it in your email:
+
+from django.template.loader import render_to_string
+
+html_message = render_to_string('welcome_email.html', {'user': user})
+
+#############
+Step 5: Common Pitfalls and How to Avoid Them
+Here are a few things I’ve seen people run into:
+
+Incorrect app passwords: If you’re using Gmail and it keeps failing, double-check your app password setup.
+
+Port and TLS confusion: For most SMTP providers:
+
+Use port 587 with EMAIL_USE_TLS = True
+
+Or port 465 with EMAIL_USE_SSL = True
+
+Email going to spam: Use real sender names and avoid spammy subject lines. Consider setting up SPF, DKIM, and DMARC records if you're going live. Here’s a simple guide on email authentication.
+
+
+#############
+
+Django - User Authentication (Login, Signup, Permissions)
+Introduction
+	user authentication and authorization are vital components of web applications. Django, a popular Python web framework, provides robust functionality for implementing user login and signup features.
+
+
+ Steps
+1. Setting Up the Django Project
+To start building our simple application, we need to set up a new Django project. We’ll cover the installation process and project initialization.
+
+To get started, follow these steps to set up the Django framework:
+
+Install Django Framework using pip:
+
+pip install django
+Create a new Django project:
+
+django-admin startproject myproject
+Create a new Django app within your project:
+
+cd myproject
+python manage.py startapp myapp
+2. Configure Django
+Open your Django project’s settings.py file and write the following code :
+
+INSTALLED_APPS = [
+    # ...
+    # ..
+    # .
+    # 👇 1. Add this line
+    'myapp',
+]
+
+TEMPLATES = [
+    {
+        # 👇 2. Add this line 
+        'DIRS': ['templates'],
+        
+    },
+]
+3. Add the URLs
+In this, For accessing our application myapp urls we have to add the following line to the myproject/urls.py file.
+
+Open the urls.py from inside of myproject folder and write the following code:
+
+from django.contrib import admin
+from django.urls import path, include # 👈 1. Add this line
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    # 👇 2. Add the app url on this
+    path('', include('myapp.urls'))
+]
+URL Configuration of views:
+
+Create a new file urls.py inside the myapp folder and write the below code:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='home'),
+    path('login/', views.user_login, name='login'),
+    path('signup/', views.user_signup, name='signup'),
+    path('logout/', views.user_logout, name='logout'),
+]
+
+5. Add the View Function
+Open, The views.py from myapp folder and write the below code for showing and redirecting to our templates:
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout 
+from .forms import SignupForm, LoginForm
+
+
+# Create your views here.
+# Home page
+def index(request):
+    return render(request, 'index.html')
+
+# signup page
+def user_signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = SignupForm()
+    return render(request, 'signup.html', {'form': form})
+
+# login page
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)    
+                return redirect('home')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
+# logout page
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+
+6. Forms
+Create a new file forms.py inside myapp folder and write the below code:
+
+from django import forms 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+class SignupForm(UserCreationForm):
+    class Meta:
+        model = User 
+        fields = ['username', 'password1', 'password2']
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
+7. Templates
+Create a new folder templates in myproject and create a new file index.html and write the below code:
+
+{% if request.user.is_authenticated %}
+  <p>{{ request.user.username }}</p>
+  <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+  <a href="{% url 'login' %}">Login</a>
+  <a href="{% url 'signup' %}">Signup</a>
+{% endif %}
+
+<h1>Welcome!</h1>
+
+
+Create a new login.html file and write the below code:
+
+<h1>Login</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+    <a href="{% url 'signup' %}">Dont have Account Create</a>
+</form>
+Create a new signup.html file and write the below code:
+
+<h1>Signup</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Signup</button>
+    <a href="{% url 'login' %}">Already have account?</a>
+</form>
+8. Testing and Running
+Now that we have set up the basic structure of our application using Django Framework, it’s time to test and run the app. Follow these steps:
+
+Step 1: Open your Command-Line Interface:
+
+Open your command-line interface and navigate to the root directory of your Django project.
+
+To proceed, please open the terminal within the myproject folder and execute the following command:
+
+python manage.py makemigrations
+python manage.py migrate
+Step 2: Start the Server:
+
+To start the server, run the following command in your command-line interface:
+
+python manage.py runserver
+This command will launch the Django development server.
+
+Step 3: Testing
+
+After running the server and accessing the project interface at http://127.0.0.1:8000/ .
 
