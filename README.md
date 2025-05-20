@@ -3255,13 +3255,13 @@ INSTALLED_APPS = [
     # ...
     # ..
     # .
-    # 👇 1. Add this line
+    #  1. Add this line
     'myapp',
 ]
 
 TEMPLATES = [
     {
-        # 👇 2. Add this line 
+        #  2. Add this line 
         'DIRS': ['templates'],
         
     },
@@ -3272,11 +3272,11 @@ In this, For accessing our application myapp urls we have to add the following l
 Open the urls.py from inside of myproject folder and write the following code:
 
 from django.contrib import admin
-from django.urls import path, include # 👈 1. Add this line
+from django.urls import path, include # 1. Add this line
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # 👇 2. Add the app url on this
+    #  2. Add the app url on this
     path('', include('myapp.urls'))
 ]
 URL Configuration of views:
@@ -3409,3 +3409,627 @@ Step 3: Testing
 
 After running the server and accessing the project interface at http://127.0.0.1:8000/ .
 
+
+#########################
+DAY 7 20 MAY
+
+ Django - Middlware, Custom Middleware
+
+ Middleware¶
+Middleware is a framework of hooks into Django’s request/response processing. It’s a light, low-level “plugin” system for globally altering Django’s input or output.
+
+Each middleware component is responsible for doing some specific function. For example, Django includes a middleware component, AuthenticationMiddleware, that associates users with requests using sessions.
+
+This document explains how middleware works, how you activate middleware, and how to write your own middleware. Django ships with some built-in middleware you can use right out of the box. 
+
+They’re documented in the built-in middleware reference.
+
+
+Writing your own middleware¶
+A middleware factory is a callable that takes a get_response callable and returns a middleware. A middleware is a callable that takes a request and returns a response, just like a view.
+
+A middleware can be written as a function that looks like this:
+
+def simple_middleware(get_response):
+    # One-time configuration and initialization.
+
+    def middleware(request):
+        # Code to be executed for each request before
+        # the view (and later middleware) are called.
+
+        response = get_response(request)
+
+        # Code to be executed for each request/response after
+        # the view is called.
+
+        return response
+
+    return middleware
+Or it can be written as a class whose instances are callable, like this:
+
+class SimpleMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        # One-time configuration and initialization.
+
+    def __call__(self, request):
+        # Code to be executed for each request before
+        # the view (and later middleware) are called.
+
+        response = self.get_response(request)
+
+        # Code to be executed for each request/response after
+        # the view is called.
+
+        return response
+
+ Middleware can live anywhere on your Python path.
+
+__init__(get_response)¶
+Middleware factories must accept a get_response argument. You can also initialize some global state for the middleware. Keep in mind a couple of caveats:
+
+Django initializes your middleware with only the get_response argument, so you can’t define __init__() as requiring any other arguments.
+
+Unlike the __call__() method which is called once per request, __init__() is called only once, when the web server starts.
+
+
+
+Activating middleware¶
+To activate a middleware component, add it to the MIDDLEWARE list in your Django settings.
+
+In MIDDLEWARE, each middleware component is represented by a string: the full Python path to the middleware factory’s class or function name. For example, here’s the default value created by django-admin startproject:
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+
+
+Middleware order and layering¶
+During the request phase, before calling the view, Django applies middleware in the order it’s defined in MIDDLEWARE, top-down.
+
+You can think of it like an onion: each middleware class is a “layer” that wraps the view, which is in the core of the onion. If the request passes through all the layers of the onion (each one calls get_response to pass the request in to the next layer), all the way to the view at the core, the response will then pass through every layer (in reverse order) on the way back out.
+
+If one of the layers decides to short-circuit and return a response without ever calling its get_response, none of the layers of the onion inside that layer (including the view) will see the request or the response. The response will only return through the same layers that the request passed in through.
+
+
+
+
+Other middleware hooks¶
+Besides the basic request/response middleware pattern described earlier, you can add three other special methods to class-based middleware:
+
+process_view()¶
+process_view(request, view_func, view_args, view_kwargs)¶
+request is an HttpRequest object. view_func is the Python function that Django is about to use. (It’s the actual function object, not the name of the function as a string.) view_args is a list of positional arguments that will be passed to the view, and view_kwargs is a dictionary of keyword arguments that will be passed to the view. Neither view_args nor view_kwargs include the first view argument (request).
+
+process_view() is called just before Django calls the view.
+
+process_exception()¶
+process_exception(request, exception)¶
+request is an HttpRequest object. exception is an Exception object raised by the view function.
+
+Django calls process_exception() when a view raises an exception. process_exception() should return either None or an HttpResponse object. If it returns an HttpResponse object, the template response and response middleware will be applied and the resulting response returned to the browser. Otherwise, default exception handling kicks in.
+
+Again, middleware are run in reverse order during the response phase, which includes process_exception. If an exception middleware returns a response, the process_exception methods of the middleware classes above that middleware won’t be called at all.
+
+process_template_response()¶
+process_template_response(request, response)¶
+request is an HttpRequest object. response is the TemplateResponse object (or equivalent) returned by a Django view or by a middleware.
+
+process_template_response() is called just after the view has finished executing, if the response instance has a render() method, indicating that it is a TemplateResponse or equivalent.
+
+It must return a response object that implements a render method. It could alter the given response by changing response.template_name and response.context_data, or it could create and return a brand-new TemplateResponse or equivalent.
+
+You don’t need to explicitly render responses – responses will be automatically rendered once all template response middleware has been called.
+
+Middleware are run in reverse order during the response phase, which includes process_template_response().
+
+
+Types of Middleware in Django
+Django's middleware can be divided into 2 types: built-in and custom.
+
+Built-in Django Middleware: Django comes with a set of built-in middleware classes. These are some of the most commonly used default middleware classes in Django:
+
+SecurityMiddleware: It provides several security-related features such as ensuring that all HTTP requests are redirected to HTTPS and is used to add security headers to responses.
+SessionMiddleware: It helps in managing sessions for users. It enables Django to handle session data, making it available to views and templates.
+CommonMiddleware: Handles common operations such as URL redirection (adding/removing "www" prefix), appending slashes to URLs.
+
+
+
+Custom Middleware: 
+		These are the middleware that a user creates for their purpose. It can be built as a class-based style with a call method that processes requests and responses or as a function style that accepts a get_response callable. It is produced in the middleware.py file. A middleware is turned on by including it in the Django settings' MIDDLEWARE list.
+
+
+Setting up the Project
+Step 1: Make sure your PC has Django Installed. First make a project with name 'projectmiddleware' by using the command
+
+Django-admin startproject  projectmiddleware
+Step 2: Create a application named 'testapp' by using the command
+
+python3 manage.py startapp testapp
+
+
+Creating Necessary Files
+views.py: This views.py file manages user authentication, user registration, and various user-specific home pages within the Django application, making it a central component for handling user interactions.
+
+
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from testapp.forms import CustomUserCreationForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to home page after login
+            return redirect('home')  
+    return render(request, 'login.html')
+
+def home_view(request):
+    return render(request, 'home.html') 
+    
+def logout_view(request):
+    logout(request)
+    # Redirect to login page after logout
+    return render(request, 'home.html')  
+
+def signup_view(request):
+    if request.method == 'POST':
+        print(request.POST['username'])
+        print(request.POST['password1'])
+        print(request.POST['role'])
+        form = CustomUserCreationForm(request.POST)
+        print(form.data)
+        print(form.errors)
+        if form.is_valid():
+            print("Valid")
+            form.save()
+            return redirect('login')
+        
+    else:
+        form = CustomUserCreationForm()
+        print("HI")
+    return render(request, 'signup.html', {'form': form})
+def teacher_home(request):
+    print("Welcome Teacher")
+    return render(request, 'teacher.html')
+
+def student_home(request):
+    print("Welcome Student")
+    return render(request, 'student.html')
+
+def principal_home(request):
+    print("Welcome Principal")
+    return render(request, 'principal.html')
+models.py: This Django code defines a custom user model, CustomUser, which extends Django's AbstractUser. It adds a role field to categorize users as teachers, students, or principals, providing role-based functionality within the application.
+
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('teacher', 'Teacher'),
+        ('student', 'Student'),
+        ('principal', 'Principal'),
+    )
+    
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return self.username
+forms.py: This code defines a custom user creation form, CustomUserCreationForm, that extends Django's UserCreationForm. It adds a role field to the form, enabling users to select their role when registering. This aligns with the role-based functionality provided by the custom user model.
+
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
+
+class CustomUserCreationForm(UserCreationForm):
+    role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = UserCreationForm.Meta.fields + ('role',)
+custom_middleware.py: This Django middleware, named CustomMiddleware, adds custom logic to the request processing flow. It distinguishes requests for login, logout, and the admin panel, handling them accordingly. For authenticated users, it redirects them to the appropriate home page based on their role (teacher, student, or principal) if necessary.
+
+
+
+
+1
+from django.utils.deprecation import MiddlewareMixin
+2
+from django.shortcuts import redirect
+3
+from testapp import views
+4
+from django.contrib.auth import get_user_model
+5
+​
+6
+User = get_user_model()
+7
+​
+8
+class CustomMiddleware(MiddlewareMixin):
+9
+    def process_request(self, request):
+10
+        # Check if the request is for the login or logout views
+11
+        if request.path == '/login/':
+12
+            # Handle login logic
+13
+            print("Login Request")
+14
+            # You can perform any additional actions related to login here
+15
+            
+16
+        elif request.path == '/logout/':
+17
+            # Handle logout logic
+18
+            print("Logout Request")
+19
+            # You can perform any additional actions related to logout here
+20
+        elif request.path == '/admin/' :
+21
+            print("Admin")
+22
+        elif request.user.is_authenticated:
+23
+            role = request.user.role
+24
+            print(role)
+25
+            if role == 'teacher' and not request.path.startswith('/teacher_home'):
+26
+                return redirect('teacher_home')
+27
+            elif role == 'student' and not request.path.startswith('/student_home'):
+28
+                return redirect('student_home')
+29
+            elif role == 'principal' and not request.path.startswith('/principal_home'):
+30
+                return redirect('principal_home')
+31
+​
+32
+        # Continue processing the request
+admin.py: This Django admin code configures the admin panel for managing custom users based on the CustomUser model. It customizes the displayed fields and registers the model for admin management.
+
+
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+
+from .models import CustomUser
+
+class CustomUserAdmin(UserAdmin):
+    list_display = (
+        'username', 'email', 'first_name', 'last_name','role'
+        )
+
+admin.site.register(CustomUser, CustomUserAdmin)
+urls.py: This Django URL configuration maps URLs to view functions within the testapp application. It defines routes for admin access, user authentication, and role-based home pages, connecting specific URLs to corresponding view functions.
+
+
+from django.contrib import admin
+from django.urls import path, include
+from testapp import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('login/', views.login_view, name='login'),
+    path('home/', views.home_view, name='home'),
+    path('logout/', views.logout_view, name='logout'),
+    path('signup/', views.signup_view, name='signup'),
+    path('teacher_home/', views.teacher_home, name='teacher_home'),
+    path('student_home/', views.student_home, name='student_home'),
+    path('principal_home/', views.principal_home, name='principal_home'),    
+]
+Setting up GUI
+home.html: This is a homepage created in HTML.
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Gfg</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+        h1 {
+            font-size: 24px;
+            color: green;
+            text-align: center;
+            padding: 50px;
+            border: 10px solid #ddd;
+            background-color: #fff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Gfg</h1>
+</body>
+</html>
+login.html: This is the login page which is used to collect the credentials from the user and then pass them to the backend.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" name="username">
+        <label for="password">Password:</label>
+        <input type="password" name="password">
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+signup.html: This is the signup page which is used to collect the credentials from the user and then register the user.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+</head>
+<body>
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Username Field -->
+        <div>
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+        </div>
+        
+        <!-- Password Fields -->
+        <div>
+            <label for="{{ form.password1.id_for_label }}">Password:</label>
+            {{ form.password1 }}
+        </div>
+        <div>
+            <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            {{ form.password2 }}
+        </div>
+        
+        <!-- Role Field -->
+        <div>
+            <label for="{{ form.role.id_for_label }}">Role:</label>
+            {{ form.role }}
+        </div>
+        
+        <button type="submit">Sign up</button>
+    </form>
+</body>
+</html>
+student.html: This is the homepage for student.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Home</title>
+</head>
+<body>
+    <h2>Welcome, Student!</h2>
+    <p>This is the student's home page.</p>
+</body>
+</html>
+teacher.html: This is the homepage for Teacher.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Home</title>
+</head>
+<body>
+    <h2>Welcome, Teacher!</h2>
+    <p>This is the teacher's home page.</p>
+</body>
+</html>
+principal.html: This is the homepage for principal.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Principal Home</title>
+</head>
+<body>
+    <h2>Welcome, Principal!</h2>
+    <p>This is the principal's home page.</p>
+</body>
+</html>
+urls.py: This Django URL configuration maps URLs to view functions within the testapp application. It defines routes for admin access, user authentication, and role-based home pages, connecting specific URLs to corresponding view functions.
+
+
+from django.contrib import admin
+from django.urls import path, include
+from testapp import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('login/', views.login_view, name='login'),
+    path('home/', views.home_view, name='home'),
+    path('logout/', views.logout_view, name='logout'),
+    path('signup/', views.signup_view, name='signup'),
+    path('teacher_home/', views.teacher_home, name='teacher_home'),
+    path('student_home/', views.student_home, name='student_home'),
+    path('principal_home/', views.principal_home, name='principal_home'),    
+]
+Deploying Project
+Run these commands to apply the migrations:
+
+python3 manage.py makemigrations
+python3 manage.py migrate
+Now, Run the server with the help of following command:
+
+python3 manage.py runserver
+
+
+################################
+Django - Request, Responce and Lifecycle
+
+
+![image](https://github.com/user-attachments/assets/8543773b-220e-40e8-9479-a56e025324d1)
+
+
+A web application or a website revolves around the request-response cycle and Django applications are no exception to this. But it is not just a two step process. Our Django applications needs to go through various stages to return the end user some result. To understand the Django framework better we must understand how the requests are initiated and the end result is served to the end user. In the following sections I am going to explain various stages of requests and the software or code used there.
+
+
+WSGI
+As we know a Web server is a program that uses HTTP (Hypertext Transfer Protocol) to serve the files that form Web pages to users, in response to their requests, which are forwarded by their computers’ HTTPclients.
+
+WSGI is a tool created to solve a basic problem: connecting a web server to a web framework. WSGI has two sides: the ‘server’ side and the ‘application’ side. To handle a WSGI response, the server executes the application and provides a callback function to the application side. The application processes the request and returns the response to the server using the provided callback. 
+
+Between the server and the application lie the middlewares. You can think of middlewares as a series of bidirectional filters: they can alter (or short-circuit) the data flowing back and forth between the network and your Django application.
+
+The Big Picture — Data Flow
+
+Layers of Django Application:---
+
+Request Middlewares
+URL Router(URL Dispatcher)
+Views
+Context Processors
+Template Renderers
+Response Middlewares
+
+
+Whenever the request comes in it is handled by the Request middlewares. We can have multiple middlewares. we can find it in project settings(settings.py). Django request middlewares follows the order while processing the request. Suppose if we have request middlewares in the order A, B, C then the request first processed by the middleware A and then B and then C. Django comes up with bunch of default middlewares. We can also write our own or custom middlewares. After request processed by the middlewares it will be submitted to the URL Router or URL dispatcher.
+
+URL Router will take the request from the request middleware and it takes the URL Path from the request. Based on the url path URL router will tries to match the request path with the available URL patterns. These URL patterns are in the form of regular expressions. After matching the URL path with available URL patterns the request will be submitted to the View which is associated with the URL.
+
+Now, we are in business logic layer Views. Views processes the business logic using request and request data(data sent in GET, POST, etc). After processing the request in the view the request is sent context processors, by using the request context processors adds the context data that will help Template Renderers to render the template to generate the HTTP response.
+
+Again the request will send back to the Response middlewares to process it. Response middlewares will process the request and adds or modifies the header information/body information before sending it back to the client(Browser). After the browser will process and display it to the end user.
+
+Middlewares
+
+Middlewares are employed in a number of key pieces of functionality in a Django project: for example :~ we use CSRF middlewares to prevent cross-site request forgery attacks. They’re used to handle session data. Authentication and authorization is accomplished with the use of middlewares. We can write our own middleware classes to shape (or short-circuit) the flow of data through your application.
+
+All Done!
+Finally, Django’s WSGI Handler builds a return value from the HttpResponseobject and executes the callback function to send that data to the web server and out to the user.
+####################################333
+
+ Django - API Architecture, Rest Principle
+
+
+ REST stands for Representational State Transfer and API stands for Application Program Interface. REST is a software architectural style that defines the set of rules to be used for creating web services. Web services that follow the REST architectural style are known as RESTful web services. It allows requesting systems to access and manipulate web resources by using a uniform and predefined set of rules. Interaction in REST-based systems happens through the Internet's Hypertext Transfer Protocol (HTTP). 
+
+A Restful system consists of a:
+A client who requests for the resources.
+server who has the resources.
+
+
+Architectural Constraints of RESTful API
+There are six architectural constraints that makes any web service are listed below:
+
+Uniform Interface
+Stateless
+Cacheable
+Client-Server
+Layered System
+Code on Demand
+
+Uniform Interface
+It is a key constraint that differentiates between a REST API and a Non-REST API. It suggests that there should be a uniform way of interacting with a given server irrespective of device or type of application (website, mobile app). 
+
+Stateless
+It means that the necessary state to handle the request is contained within the request itself and server would not store anything related to the session. In REST, the client must include all information for the server to fulfill the request whether as a part of query params, headers or URI. Statelessness enables greater availability since the server does not have to maintain, update or communicate that session state. There is a drawback when the client need to send too much data to the server so it reduces the scope of network optimization and requires more bandwidth.
+
+Cacheable
+Every response should include whether the response is cacheable or not and for how much duration responses can be cached at the client side. Client will return the data from its cache for any subsequent request and there would be no need to send the request again to the server. A well-managed caching partially or completely eliminates some client–server interactions, further improving availability and performance. But sometime there are chances that user may receive stale data. 
+
+Client-Server
+REST application should have a client-server architecture. A Client is someone who is requesting resources and are not concerned with data storage, which remains internal to each server, and server is someone who holds the resources and are not concerned with the user interface or user state. They can evolve independently. Client doesn't need to know anythinG ABout business logic and server doesn't need to know anything about frontend UI. 
+
+Layered system
+An application architecture needs to be composed of multiple layers. Each layer doesn't know any thing about any layer other than that of immediate layer and there can be lot of intermediate servers between client and the end server. Intermediary servers may improve system availability by enabling load-balancing and by providing shared caches. 
+
+Code on demand
+It is an optional feature. According to this, servers can also provide executable code to the client. The examples of code on demand may include the compiled components such as Java Servlets and Server-Side Scripts such as JavaScript. 
+
+
+
+Rules of REST API
+There are certain rules which should be kept in mind while creating REST API endpoints.
+
+REST is based on the resource or noun instead of action or verb based. It means that a URI of a REST API should always end with a noun. Example: /api/users is a good example, but /api?type=users is a bad example of creating a REST API.
+HTTP verbs are used to identify the action. Some of the HTTP verbs are - GET, PUT, POST, DELETE, GET, PATCH.
+A web application should be organized into resources like users and then uses HTTP verbs like - GET, PUT, POST, DELETE to modify those resources. And as a developer it should be clear that what needs to be done just by looking at the endpoint and HTTP method used.
+
+
+######################
+
+API integration and its importance
+				The process of connecting two or more software applications or processes using APIs is referred to as API integration. This allows the systems to exchange data and functionality, allowing them to work in unison. APIs are a collection of protocols, routines, and tools used to create software and applications. APIs allow for communication between different applications specifying how the software components should interact with each other.
+	      API integration is required for businesses to connect their systems and services to other external applications, allowing them to exchange data and functionality in real time. This improves efficiency, scalability, and user experience while potentially saving money. Businesses can use API integration to automate tasks and integrate new systems and services, creating new opportunities for innovation and growth. Without API integration, businesses would have to rely on manual processes and custom development, which can be costly, time-consuming, and less efficient.
+
+
+How to Achieve API integration---
+
+1. Custom Integration
+			It is the process of connecting one application or service to another via a custom-built API. Custom integration can be created when an existing API is not available or does not meet the specific needs of the integration. This entails developing a new API that allows data and functionality to be exchanged between systems or services. These integrations can be built in a variety of programming languages, such as Python(Build a REST API using Flask) or JavaScript (REST API in Node.js), and can be tailored to specific needs and constraints.
+
+
+2. Connector Applications
+			It is the process of utilizing third-party software to connect various systems and services via APIs. These connector applications, also known as middleware, frequently come with preconfigured tools for popular systems and services and act as a bridge between the systems and services, allowing data and functionality to be exchanged. A connector application, for example, can be used to integrate social media platforms such as Instagram with an analytics tool, allowing for the automatic collection of social media data such as follower counts and the analysis of this data in the analytics tool.
+
+
+3. Integration Platforms
+			Integration platforms also referred to as iPaaS (integration platform as a service), offer a centralized environment for developing, deploying, and managing integrations. They usually include pre-built connectors for popular systems and services, as well as tools for developing custom connectors and workflows. They support a wide range of integration scenarios, such as real-time data synchronization, batch data processing, and the creation and execution of complex business processes. They can also include features like monitoring and analytics, security, and error handling. Examples of Integration Platforms include Mulesoft and Jitterbit.
+Integration Platforms are more powerful and versatile than connector applications, but, aside from being costly, they are also more difficult to set up and manage
+##################
+
+How to Create a basic API using Django Rest Framework ?
+
+Steps:--
+
+Add rest_framework to INSTALLED_APPS
+Create a app and model -> url and model create also
+Serialization ->include meta class
+Creating a viewset
+Define URLs of API
+Run server and check API
+
+Run server and check API-->
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
